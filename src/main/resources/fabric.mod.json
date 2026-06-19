@@ -9,9 +9,9 @@
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Telephonkin/Entity-lifetime-mod"
 	},
-	"license": "MIT",
+	"license": "Apache v.2",
 	"icon": "assets/entity-lifetime-mod/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -19,7 +19,7 @@
 			"net.telephonkin.EntityLifeTimeMod"
 		],
 		"fabric-datagen": [
-			"net.telephonkin.entityLifeTimeModDataGenerator"
+			"net.telephonkin.EntityLifeTimeModDataGenerator"
 		]
 	},
 	"mixins": [
