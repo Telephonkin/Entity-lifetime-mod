@@ -1,18 +1,8 @@
 package net.telephonkin.data;
 
-import com.mojang.authlib.minecraft.client.ObjectMapper;
-
-import java.util.HashMap;
-import java.util.Map;
-import com.google.gson.Gson;
-import com.google.common.reflect.TypeToken;
 import blue.endless.jankson.Jankson;
-import blue.endless.jankson.JsonElement;
-import blue.endless.jankson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import blue.endless.jankson.Comment;
 
