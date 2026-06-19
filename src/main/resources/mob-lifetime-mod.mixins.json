@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "net.telephonkin.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+      "EntityLifeTimeMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
