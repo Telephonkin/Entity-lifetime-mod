@@ -2,10 +2,16 @@ package net.telephonkin.data;
 
 import com.google.gson.Gson;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Optional;
+
 
 public class DefaultConfig {
     private static final File default_vanilla_config_file = FabricLoader.getInstance().getConfigDir().resolve("net/telephonkin/data/DefaultConfig.json5").toFile();
@@ -40,9 +46,9 @@ public class DefaultConfig {
         if (default_vanilla_config_file.exists()) {
             // Read and parse the existing configuration file
             // e.g., using Gson, Jackson, or a custom parser
-            default_vanilla_config_file.createNewFile();
-        } else {
 
+        } else {
+            default_vanilla_config_file.createNewFile();
             // Create a default configuration file because it's missing
             // e.g., Files.createFile(configPath);
         }
