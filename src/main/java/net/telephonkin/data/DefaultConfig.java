@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class DefaultConfig {
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir();
 
-    //This file is used as default vanilla config
+    // This file is used as default vanilla config
     private static final File default_vanilla_config_file = FabricLoader.getInstance().getConfigDir().resolve("net/telephonkin/data/DefaultConfig.json5").toFile();
 
     public static DefaultConfig config = new DefaultConfig();
