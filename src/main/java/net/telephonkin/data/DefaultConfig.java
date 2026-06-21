@@ -8,17 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-
 public class DefaultConfig {
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir();
     File CONFIG = CONFIG_PATH.resolve("entity_lifetime_config.json5").toFile();
 
     public static DefaultConfig config = new DefaultConfig();
 
-    //static String default_vanilla_mod_config = "net/telephonkin/data/DefaultConfig.json5"; // Placed in resources folder
-
     public HashMap<String, Integer> loadConfig() throws IOException {
-
         if (CONFIG.exists()) {
             // Read the existing entity_lifetime_config.json5 configuration file
             String map = CONFIG.toString();

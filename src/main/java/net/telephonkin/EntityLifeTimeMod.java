@@ -4,9 +4,12 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.world.ServerWorld;
+import net.telephonkin.data.DefaultConfig;
 import net.telephonkin.data.EntityLifeTimeTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 public class EntityLifeTimeMod implements ModInitializer {
 	public static final String MOD_ID = "entity-lifetime-mod";
@@ -53,6 +56,14 @@ public class EntityLifeTimeMod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		INSTANCE = this;
+
+		// Load the config data
+		try {
+			DefaultConfig.config.loadConfig();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
 		// Triggered when a player finishes joining the server
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			this.setWorld(server.getOverworld());
@@ -60,6 +71,8 @@ public class EntityLifeTimeMod implements ModInitializer {
 			this.setentity_birth_table(EntityLifeTimeTable.get(world));
 		});
 
-		LOGGER.info("Hello Fabric world!");
+
+
+        LOGGER.info("Hello Fabric world!");
 	}
 }
