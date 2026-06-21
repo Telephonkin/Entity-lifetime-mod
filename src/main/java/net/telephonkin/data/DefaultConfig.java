@@ -9,48 +9,33 @@ import net.minecraft.util.Identifier;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Optional;
 
 
 public class DefaultConfig {
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir();
+
     private static final File default_vanilla_config_file = FabricLoader.getInstance().getConfigDir().resolve("net/telephonkin/data/DefaultConfig.json5").toFile();
 
     public static DefaultConfig config = new DefaultConfig();
 
     static String default_vanilla_mod_config = "net/telephonkin/data/DefaultConfig.json5"; // Placed in resources folder
 
-    private InputStream getFileFromResourceAsStream(String fileName) {
-
-        // The class loader that loaded the class
-        ClassLoader classLoader = getClass().getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(fileName);
-
-        // the stream holding the file content
-        if (inputStream == null) {
-            throw new IllegalArgumentException("file not found! " + fileName);
-        } else {
-            return inputStream;
-        }
-
-    }
-
     public void loadMyConfig() throws IOException {
 
-        //InputStream default_vanilla_config_as_stream = DefaultConfig.config.getFileFromResourceAsStream(default_vanilla_mod_config);
-        File DefaultConfigFile = new File("DefaultConfig.json5");
-        String map = DefaultConfigFile.toString();
-        HashMap<String,Integer> default_vanilla_config_map = new Gson().fromJson(map, HashMap.class);
-
-
         if (default_vanilla_config_file.exists()) {
-            // Read and parse the existing configuration file
-            // e.g., using Gson, Jackson, or a custom parser
+            // Read the existing entity_lifetime_config.json5 configuration file
 
         } else {
-            default_vanilla_config_file.createNewFile();
-            // Create a default configuration file because it's missing
-            // e.g., Files.createFile(configPath);
+            // Take file DefaultConfig.json5 from same directory and create it in config directory;
+            // Use config from this DefaultConfig.json5 file
+            File DefaultConfigFile = new File("DefaultConfig.json5");
+            String map = DefaultConfigFile.toString();
+            HashMap<String,Integer> default_vanilla_config_map = new Gson().fromJson(map, HashMap.class);
+            Files.writeString(CONFIG_PATH, (CharSequence) default_vanilla_config_map);
         }
     }
 }
