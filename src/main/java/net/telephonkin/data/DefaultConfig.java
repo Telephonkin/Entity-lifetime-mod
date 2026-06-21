@@ -32,7 +32,6 @@ public class DefaultConfig {
             Files.writeString(CONFIG_PATH, (CharSequence) default_vanilla_config_map);
             return default_vanilla_config_map;
         }
-        return null;
     }
 }
 
