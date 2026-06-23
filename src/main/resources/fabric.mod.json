@@ -12,14 +12,11 @@
 		"sources": "https://github.com/Telephonkin/Entity-lifetime-mod"
 	},
 	"license": "Apache v.2",
-	"icon": "assets/entity-lifetime-mod/icon.png",
+	"icon": "assets/entity-lifetime-mod/icon.jpg",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"net.telephonkin.EntityLifeTimeMod"
-		],
-		"fabric-datagen": [
-			"net.telephonkin.EntityLifeTimeModDataGenerator"
 		]
 	},
 	"mixins": [],
