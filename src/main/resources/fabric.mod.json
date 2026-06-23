@@ -22,9 +22,7 @@
 			"net.telephonkin.EntityLifeTimeModDataGenerator"
 		]
 	},
-	"mixins": [
-		"entity-lifetime-mod.mixins.json"
-	],
+	"mixins": [],
 	"depends": {
 		"fabricloader": ">=0.19.3",
 		"minecraft": "~1.20.1",
