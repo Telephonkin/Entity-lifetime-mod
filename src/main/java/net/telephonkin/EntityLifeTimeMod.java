@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EntityLifeTimeMod implements ModInitializer {
 	public static final String MOD_ID = "entity-lifetime-mod";
@@ -59,12 +62,12 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 		// Load the config data
 		try {
-			DefaultConfig.config.loadConfig();
-		} catch (IOException e) {
+			Map loaded_config = DefaultConfig.config.loadConfig();
+		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 
-		// Triggered when a player finishes joining the server
+        // Triggered when a player finishes joining the server
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			this.setWorld(server.getOverworld());
 			this.setTimer(0L);

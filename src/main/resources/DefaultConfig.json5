@@ -1,8 +1,4 @@
-// Place time in minecraft ticks , -1 means that this entity type will live forever
-// Feel free to add your modded entities here
 {
-  // Vanilla
-  // Hostile mobs
   "minecraft:blaze": 40000,
   "minecraft:cave_spider": 34000,
   "minecraft:creeper": 38000,
@@ -35,7 +31,6 @@
   "minecraft:zombie":66000,
   "minecraft:zombie_villager":80000,
   "minecraft:zombified_piglin":68000,
-  //Passive & Neutral mobs
   "minecraft:allay":-1,
   "minecraft:axolotl":120000,
   "minecraft:bat":24000,
@@ -77,7 +72,6 @@
   "minecraft:wandering_trader":-1,
   "minecraft:wolf":90000,
   "minecraft:zombie_horse":96000,
-  //Projectiles & Thrown Entities
   "minecraft:arrow":1000,
   "minecraft:dragon_fireball":-1,
   "minecraft:egg":-1,
@@ -97,7 +91,6 @@
   "minecraft:trident":-1,
   "minecraft:wither_skull":-1,
   "minecraft:experience_bottle":-1,
-  //VehiclesRideable or transport-based entities
   "minecraft:boat":-1,
   "minecraft:chest_boat":-1,
   "minecraft:bamboo_raft":-1,
@@ -109,7 +102,6 @@
   "minecraft:hopper_minecart":-1,
   "minecraft:spawner_minecart":-1,
   "minecraft:tnt_minecart":-1,
-  //Technical & Utility Entities (Non-living physical items and background game mechanics)
   "minecraft:area_effect_cloud":-1,
   "minecraft:armor_stand":-1,
   "minecraft:block_display":-1,
