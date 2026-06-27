@@ -1,26 +1,41 @@
 package net.telephonkin.data;
 
+import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import net.fabricmc.loader.api.FabricLoader;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import org.slf4j.Logger;
 
 public class DefaultConfig {
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir();
     File CONFIG = CONFIG_PATH.resolve("entity_lifetime_config.json5").toFile();
 
     public static DefaultConfig config = new DefaultConfig();
+
+    public static void copyResourceToFile(String resourceName, Path destination) throws IOException {
+        // Ensure the parent directories for the custom file exist
+        if (destination.getParent() != null) {
+            Files.createDirectories(destination.getParent());
+        }
+
+
+    }
 
     public Map<String, Integer> loadConfig() throws IOException, URISyntaxException {
         if (CONFIG.exists()) {
@@ -40,23 +55,44 @@ public class DefaultConfig {
             Path DefaultConfigFilePath = Paths.get(DefaultConfigFile.toURI());
             Gson gson = new Gson();
 
+            // Casting config to proper Type
             Map default_vanilla_config_map_as_map = gson.fromJson(Files.readString(DefaultConfigFilePath), Map.class); // Use this Map as config for entities lifetime
-
             Map<String, Integer> default_vanilla_config_map_unraw = (Map<String, Integer>) default_vanilla_config_map_as_map;
-
-
             HashMap<String, Integer> default_vanilla_config_map = new HashMap<String, Integer>(default_vanilla_config_map_unraw);
-            //HashMap<String, Integer> hashMap =
-            //        (default_vanilla_config_map_unraw instanceof HashMap)
-            //                ? (HashMap) default_vanilla_config_map_unraw
-            //                : new HashMap<String, Integer>(default_vanilla_config_map_unraw);
 
-            //HashMap<String, Integer> default_vanilla_config_map = (HashMap<String, Integer>) default_vanilla_config_map_unraw;
+            // Repairing keys and values for config file in config folder
+            File source = new File("/DefaultConfig.json5");
+            File dest = new File(CONFIG_PATH.toString() + "/entity_lifetime_config.json5");
+
+            String data = new String(Objects.requireNonNull(getClass().getResourceAsStream("/DefaultConfig.json5")).readAllBytes());
+
+
+            //try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("/DefaultConfig.json5")) {
+            //    assert is != null;
+            //    Files.copy(is, Paths.get(CONFIG_PATH.toString() + "/entity_lifetime_config.json5"));
+            //} catch (IOException e) {
+            //    System.out.println("failed to copy default config");
+                // An error occurred copying the resource
+            //}
+
+
+            //try {
+            //FileUtils.copyDirectory(
+            //        source,
+            //        dest
+            //);
+            //} catch (IOException e) {
+            //    System.out.println("failed to copy default config");
+            //    //e.printStackTrace();
+            //}
+            //for (Map.Entry<String, Integer> entry : default_vanilla_config_map.entrySet()) {
+            //    System.out.println(entry.getKey());
+            //}
 
             //System.out.println(CONFIG_PATH.toString() + "/entity_lifetime_config.json5");
 
             try (PrintWriter out = new PrintWriter(CONFIG_PATH.toString() + "/entity_lifetime_config.json5")) {
-                out.println(default_vanilla_config_map.toString());
+                out.println(data);
             }
 
             return default_vanilla_config_map;
