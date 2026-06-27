@@ -1,9 +1,12 @@
 package net.telephonkin.mixin;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.Identifier;
+import net.telephonkin.EntityLifeTimeMod;
 import net.telephonkin.data.EntityLifeTimeTable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,6 +14,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.HashMap;
 
 @Mixin(ServerWorld.class)
 public abstract class EntityLifeTimeMixin {
@@ -25,8 +30,11 @@ public abstract class EntityLifeTimeMixin {
 			ServerWorld world = server.getOverworld();
 			EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(world);
 			long birthdate;
+			HashMap<String, Integer> CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedConfig();
 
-			if (entity.getType() == EntityType.SLIME) {
+			String entityTypeString = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
+
+			if (CONFIG.get(entityTypeString) != -1) {
 				// write data about entity UUID and birthtime to the table
 				birthdate = server.getTicks();
 				entity_birth_table.entityLifeTimeTable.put(entity.getUuid(), birthdate);

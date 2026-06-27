@@ -25,6 +25,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 	private ServerWorld world;
 	private long timer;
 	private EntityLifeTimeTable entity_birth_table;
+	private HashMap<String, Integer> LoadedConfig;
 
 	public ServerWorld getWorld() {
 		return this.world;
@@ -50,6 +51,14 @@ public class EntityLifeTimeMod implements ModInitializer {
 		this.entity_birth_table = entity_birth_table;
 	}
 
+	public HashMap<String, Integer> getLoadedConfig() {
+		return LoadedConfig;
+	}
+
+	public void setLoadedConfig(HashMap<String, Integer> loadedConfig) {
+		LoadedConfig = loadedConfig;
+	}
+
 	public static EntityLifeTimeMod INSTANCE;
 	//static public entityLifeTimeMod getInstance() { return INSTANCE; }
 
@@ -62,7 +71,8 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 		// Load the config data
 		try {
-			HashMap<String, Integer> loaded_config = DefaultConfig.config.loadConfig();
+			this.setLoadedConfig(DefaultConfig.config.loadConfig());
+			//HashMap<String, Integer> loaded_config = DefaultConfig.config.loadConfig();
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -73,8 +83,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 			this.setTimer(0L);
 			this.setentity_birth_table(EntityLifeTimeTable.get(world));
 		});
-
-
 
         LOGGER.info("Hello Fabric world!");
 	}
