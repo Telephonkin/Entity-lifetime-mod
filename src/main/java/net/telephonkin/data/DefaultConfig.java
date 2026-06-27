@@ -19,8 +19,6 @@ import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import org.slf4j.Logger;
 
 public class DefaultConfig {
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir();
@@ -28,23 +26,15 @@ public class DefaultConfig {
 
     public static DefaultConfig config = new DefaultConfig();
 
-    public static void copyResourceToFile(String resourceName, Path destination) throws IOException {
-        // Ensure the parent directories for the custom file exist
-        if (destination.getParent() != null) {
-            Files.createDirectories(destination.getParent());
-        }
-
-
-    }
-
-    public Map<String, Integer> loadConfig() throws IOException, URISyntaxException {
+    public HashMap<String, Integer> loadConfig() throws IOException, URISyntaxException {
         if (CONFIG.exists()) {
-            // Read the existing entity_lifetime_config.json5 configuration file
-            String map = CONFIG.toString();
-            return new Gson().fromJson(
-                    map,
-                    new TypeToken<HashMap<String, Integer>>()  {}.getType()
-            );
+            Path ConfigFile = Paths.get(CONFIG_PATH.toString() + "/entity_lifetime_config.json5");
+            Gson gson = new Gson();
+
+            Map default_vanilla_config_map_as_map = gson.fromJson(Files.readString(ConfigFile), Map.class); // Use this Map as config for entities lifetime
+            Map<String, Integer> default_vanilla_config_map_unraw = (Map<String, Integer>) default_vanilla_config_map_as_map;
+            return new HashMap<String, Integer>(default_vanilla_config_map_unraw);
+
         } else {
             // Take file DefaultConfig.json5 from same directory and create it in config directory;
             // Use config from this DefaultConfig.json5 file
@@ -55,11 +45,12 @@ public class DefaultConfig {
             Path DefaultConfigFilePath = Paths.get(DefaultConfigFile.toURI());
             Gson gson = new Gson();
 
-            // Casting config to proper Type
+            // Casting config to proper HashMap type
             Map default_vanilla_config_map_as_map = gson.fromJson(Files.readString(DefaultConfigFilePath), Map.class); // Use this Map as config for entities lifetime
             Map<String, Integer> default_vanilla_config_map_unraw = (Map<String, Integer>) default_vanilla_config_map_as_map;
             HashMap<String, Integer> default_vanilla_config_map = new HashMap<String, Integer>(default_vanilla_config_map_unraw);
 
+            // Copying default config to config folder
             String data = new String(Objects.requireNonNull(getClass().getResourceAsStream("/DefaultConfig.json5")).readAllBytes());
 
             try (PrintWriter out = new PrintWriter(CONFIG_PATH.toString() + "/entity_lifetime_config.json5")) {

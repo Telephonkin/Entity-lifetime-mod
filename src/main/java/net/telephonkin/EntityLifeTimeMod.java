@@ -62,7 +62,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 		// Load the config data
 		try {
-			Map loaded_config = DefaultConfig.config.loadConfig();
+			HashMap<String, Integer> loaded_config = DefaultConfig.config.loadConfig();
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
