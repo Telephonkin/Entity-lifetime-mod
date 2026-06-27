@@ -60,36 +60,7 @@ public class DefaultConfig {
             Map<String, Integer> default_vanilla_config_map_unraw = (Map<String, Integer>) default_vanilla_config_map_as_map;
             HashMap<String, Integer> default_vanilla_config_map = new HashMap<String, Integer>(default_vanilla_config_map_unraw);
 
-            // Repairing keys and values for config file in config folder
-            File source = new File("/DefaultConfig.json5");
-            File dest = new File(CONFIG_PATH.toString() + "/entity_lifetime_config.json5");
-
             String data = new String(Objects.requireNonNull(getClass().getResourceAsStream("/DefaultConfig.json5")).readAllBytes());
-
-
-            //try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("/DefaultConfig.json5")) {
-            //    assert is != null;
-            //    Files.copy(is, Paths.get(CONFIG_PATH.toString() + "/entity_lifetime_config.json5"));
-            //} catch (IOException e) {
-            //    System.out.println("failed to copy default config");
-                // An error occurred copying the resource
-            //}
-
-
-            //try {
-            //FileUtils.copyDirectory(
-            //        source,
-            //        dest
-            //);
-            //} catch (IOException e) {
-            //    System.out.println("failed to copy default config");
-            //    //e.printStackTrace();
-            //}
-            //for (Map.Entry<String, Integer> entry : default_vanilla_config_map.entrySet()) {
-            //    System.out.println(entry.getKey());
-            //}
-
-            //System.out.println(CONFIG_PATH.toString() + "/entity_lifetime_config.json5");
 
             try (PrintWriter out = new PrintWriter(CONFIG_PATH.toString() + "/entity_lifetime_config.json5")) {
                 out.println(data);
