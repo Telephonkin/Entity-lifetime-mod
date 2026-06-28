@@ -1,6 +1,7 @@
 {
   "minecraft:blaze": 40000,
   "minecraft:cave_spider": 34000,
+  "minecraft:spider": 38000,
   "minecraft:creeper": 38000,
   "minecraft:drowned": 42000,
   "minecraft:elder_guardian":-1,
