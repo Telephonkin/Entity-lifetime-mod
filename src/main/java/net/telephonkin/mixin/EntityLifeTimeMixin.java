@@ -66,7 +66,7 @@ public abstract class EntityLifeTimeMixin {
 				//entity_birth_table.entityLifeTimeTable.put(entity.getUuid(), birthdate);
 				System.out.println("Table:" + entity_birth_table.getMap());
 				//System.out.println("A Creeper has spawned with UUID:" + entity.getUuidAsString() + "at " + birthdate);
-				//entity_birth_table.markDirty();
+				entity_birth_table.markDirty();
 			}
 
 		}
