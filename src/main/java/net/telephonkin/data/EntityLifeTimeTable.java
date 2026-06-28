@@ -13,10 +13,15 @@ import java.util.UUID;
 
 public class EntityLifeTimeTable extends PersistentState{
     // table of entity's birthdates must be organized, so LinkedHashMap is used
-    public final Map<UUID, Long> entityLifeTimeTable = new LinkedHashMap<>();
+    public LinkedHashMap<UUID, Long> entityLifeTimeTable = new LinkedHashMap<>(); // it might be final
 
     public LinkedHashMap<UUID, Long> getMap() {
         return (LinkedHashMap<UUID, Long>) this.entityLifeTimeTable;
+    }
+
+    public LinkedHashMap<UUID, Long> setMap(LinkedHashMap<UUID, Long> input_map) {
+        entityLifeTimeTable = input_map;
+        return input_map;
     }
 
     // --- SAVE LOGIC ---
