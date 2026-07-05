@@ -19,9 +19,10 @@ public class EntityLifeTimeTable extends PersistentState{
         return (LinkedHashMap<UUID, Long>) this.entityLifeTimeTable;
     }
 
-    public LinkedHashMap<UUID, Long> setMap(LinkedHashMap<UUID, Long> input_map) {
-        entityLifeTimeTable = input_map;
-        return input_map;
+    public void setMap(LinkedHashMap<UUID, Long> input_map) {
+        this.entityLifeTimeTable = input_map;
+        System.out.println("input" + this.entityLifeTimeTable);
+        System.out.println("Table:" + this.entityLifeTimeTable);
     }
 
     // --- SAVE LOGIC ---

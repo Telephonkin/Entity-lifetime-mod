@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.telephonkin.EntityLifeTimeMod;
 import net.telephonkin.data.EntityLifeTimeTable;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Final;
@@ -30,6 +31,9 @@ import static net.telephonkin.data.EntityLifeTimeTableProperPut.putProperly;
 public abstract class EntityLifeTimeMixin {
 
 	@Shadow @Final private MinecraftServer server;
+
+	@Shadow public abstract ServerWorld toServerWorld();
+
 	@Unique
 	private static final Logger LOGGER = LoggerFactory.getLogger("entity-lifetime-mod");
 	@Unique
@@ -40,8 +44,13 @@ public abstract class EntityLifeTimeMixin {
 		// Server-side logic, which represents entity natural spawn
 		if (!entity.getWorld().isClient()) {
 
-			ServerWorld world = server.getOverworld();
-			EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(world);
+			//ServerWorld world = server.getWorlds();
+			Iterable<ServerWorld> worlds = server.getWorlds();
+			ServerWorld overworld = server.getOverworld();
+			//ServerWorld world = server.getOverworld();
+			//ServerWorld world = (ServerWorld) server.getWorld();
+
+			EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(overworld);
 			long birthdate;
 
 			String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
@@ -58,13 +67,14 @@ public abstract class EntityLifeTimeMixin {
 
 				entity_birth_table.setMap(putProperly(
 						LOADED_MOD_CONFIG,
-						world,
+						worlds,
+						server,
 						entity_birth_table.getMap(),
 						entity,
 						entity.getUuid(),
 						birthdate));
 				//entity_birth_table.entityLifeTimeTable.put(entity.getUuid(), birthdate);
-				System.out.println("Table:" + entity_birth_table.getMap());
+				//System.out.println("Table:" + entity_birth_table.getMap());
 				//System.out.println("A Creeper has spawned with UUID:" + entity.getUuidAsString() + "at " + birthdate);
 				entity_birth_table.markDirty();
 			}
