@@ -1,16 +1,10 @@
 package net.telephonkin.mixin;
 
-import it.unimi.dsi.fastutil.Hash;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Identifier;
 import net.telephonkin.EntityLifeTimeMod;
 import net.telephonkin.data.EntityLifeTimeTable;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Final;
@@ -21,9 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.lang.reflect.TypeVariable;
 import java.util.*;
-import java.util.function.BiConsumer;
 
 import static net.telephonkin.data.EntityLifeTimeTableProperPut.putProperly;
 
@@ -31,8 +23,6 @@ import static net.telephonkin.data.EntityLifeTimeTableProperPut.putProperly;
 public abstract class EntityLifeTimeMixin {
 
 	@Shadow @Final private MinecraftServer server;
-
-	@Shadow public abstract ServerWorld toServerWorld();
 
 	@Unique
 	private static final Logger LOGGER = LoggerFactory.getLogger("entity-lifetime-mod");
@@ -44,8 +34,7 @@ public abstract class EntityLifeTimeMixin {
 		// Server-side logic, which represents entity natural spawn
 		if (!entity.getWorld().isClient()) {
 
-			//ServerWorld world = server.getWorlds();
-			Iterable<ServerWorld> worlds = server.getWorlds();
+			//Iterable<ServerWorld> worlds = server.getWorlds();
 			ServerWorld overworld = server.getOverworld();
 			//ServerWorld world = server.getOverworld();
 			//ServerWorld world = (ServerWorld) server.getWorld();
