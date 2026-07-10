@@ -39,44 +39,15 @@ public class EntityLifeTimeTableProperPut {
             return output_reversed;
         } else {
             reversed_entity_list.forEach((key, value) -> {
-                //System.out.println("key" + key);
-                //System.out.println("value" + value);
                 String entity_type_from_map = input_map.get(key).entrySet().iterator().next().getKey();
-                //System.out.println(entity_type_from_map);
-                /*for (ServerWorld world: worlds) {
-                    //System.out.println(Objects.requireNonNull(world.getEntity(key)).getType().toString());
-                    try {
-                        //System.out.println(Objects.requireNonNull(world.getEntity(key)).getType().toString());
-                        //if (Objects.requireNonNull(world.getEntity(key)).getType() != null) {
-                            entity_type_from_map = Objects
-                                    .requireNonNull(
-                                            world.getEntity(key))
-                                    .getType()
-                                    .toString()
-                                    .substring(7)
-                                    .replace(".", ":");
-
-                            break;
-                        //} else {
-                            //System.out.println("In world" + world.toString() + "there is no entity with UUID" + to_put_uuid.toString());
-                            //continue;
-                        //}
-                    } catch (NullPointerException e){
-                        continue;
-                    }
-                }*/
                 String new_entity_type = entity.getType().toString().substring(7).replace(".",":");
                 long how_much_does_entity_from_map_live = 0L;
                 long how_much_does_new_entity_live = 0L;
 
-                //try {
-                    how_much_does_new_entity_live = (long) ((Number) LOADED_MOD_CONFIG.get(new_entity_type)).intValue();
-                    //System.out.println();
-                    //System.out.println(entity_type_from_map);
-                    how_much_does_entity_from_map_live = (long) ((Number) LOADED_MOD_CONFIG.get(entity_type_from_map)).intValue();
-                //} catch (Exception e) {
-                //    LOGGER.info("REASON " + LOADED_MOD_CONFIG.get(entity_type_from_map) + " and ENTITY type " + entity_type_from_map);
-                //}
+                how_much_does_new_entity_live = (long) ((Number) LOADED_MOD_CONFIG.get(new_entity_type)).intValue();
+
+                how_much_does_entity_from_map_live = (long) ((Number) LOADED_MOD_CONFIG.get(entity_type_from_map)).intValue();
+
                 if (is_new_entity_added[0]) {
                     output_reversed.put(key, value);
                 } else {
@@ -92,7 +63,7 @@ public class EntityLifeTimeTableProperPut {
                     }
                 }
             });
-            System.out.println("output table" + output_reversed.reversed().toString());
+            //System.out.println("output table" + output_reversed.reversed().toString());
             return new LinkedHashMap<UUID, HashMap<String, Long>>(output_reversed.reversed());
         }
     }
