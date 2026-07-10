@@ -67,8 +67,6 @@ public abstract class EntityLifeTimeMixin {
 
 				entity_birth_table.setMap(putProperly(
 						LOADED_MOD_CONFIG,
-						worlds,
-						server,
 						entity_birth_table.getMap(),
 						entity,
 						entity.getUuid(),

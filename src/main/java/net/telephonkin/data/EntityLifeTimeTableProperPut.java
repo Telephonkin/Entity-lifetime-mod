@@ -7,8 +7,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.Unique;
-
 import java.util.*;
 
 public class EntityLifeTimeTableProperPut {
@@ -17,8 +15,6 @@ public class EntityLifeTimeTableProperPut {
 
     public static LinkedHashMap<UUID, HashMap<String, Long>> putProperly(
             HashMap<String, Integer> LOADED_MOD_CONFIG,
-            Iterable<ServerWorld> worlds,
-            MinecraftServer server,
             LinkedHashMap<UUID, HashMap<String, Long>> input_map,
             Entity entity,
             UUID to_put_uuid,
