@@ -1,6 +1,8 @@
 package net.telephonkin.mixin;
 
+import net.minecraft.network.ClientConnection;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.entity.Entity;
 import net.telephonkin.EntityLifeTimeMod;
@@ -13,6 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
@@ -20,7 +23,7 @@ import java.util.*;
 import static net.telephonkin.data.EntityLifeTimeTableProperPut.putProperly;
 
 @Mixin(ServerWorld.class)
-public abstract class EntityLifeTimeMixin {
+public abstract class EntitySpawnMixin {
 
 	@Shadow @Final private MinecraftServer server;
 
@@ -59,4 +62,10 @@ public abstract class EntityLifeTimeMixin {
 		}
 
 	}
+
+	/*@Inject(method = "onPlayerConnect", at = @At("HEAD"))
+	private void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
+		// Your custom logic here
+		// Example: System.out.println(player.getName().getString() + " joined!");
+	}*/
 }

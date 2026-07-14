@@ -26,6 +26,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 	private long timer;
 	private EntityLifeTimeTable entity_birth_table;
 	private HashMap<String, Integer> LoadedConfig;
+	private final LifetimeCounter lifetimeCounter = new LifetimeCounter();
 
 	public ServerWorld getWorld() {
 		return this.world;
@@ -82,6 +83,8 @@ public class EntityLifeTimeMod implements ModInitializer {
 			this.setWorld(server.getOverworld());
 			this.setTimer(0L);
 			this.setentity_birth_table(EntityLifeTimeTable.get(world));
+
+			//lifetimeCounter.processStart();
 		});
 
         LOGGER.info("Hello Fabric world!");

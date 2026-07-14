@@ -11,15 +11,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class EntityLifeTimeTable extends PersistentState {
-    public LinkedHashMap<UUID, HashMap<String, Long>> entityLifeTimeTable = new LinkedHashMap<>();
+public class SavedEntityLifeTimeCounter extends PersistentState {
+    public long savedEntityLifeTimeCounter;
 
-    public LinkedHashMap<UUID, HashMap<String, Long>> getMap() {
-        return this.entityLifeTimeTable;
+    public long getValue() {
+        return this.savedEntityLifeTimeCounter;
     }
 
-    public void setMap(LinkedHashMap<UUID, HashMap<String, Long>> input_map) {
-        this.entityLifeTimeTable = input_map;
+    public void setValue(long input_value) {
+        this.savedEntityLifeTimeCounter = input_value;
         //System.out.println("input: " + this.entityLifeTimeTable);
         //System.out.println("Table: " + this.entityLifeTimeTable);
     }
@@ -29,7 +29,10 @@ public class EntityLifeTimeTable extends PersistentState {
     public NbtCompound writeNbt(NbtCompound nbt) {
         NbtList list = new NbtList();
 
-        for (Map.Entry<UUID, HashMap<String, Long>> entry : entityLifeTimeTable.entrySet()) {
+        NbtCompound entryCompound = new NbtCompound();
+        entryCompound.putLong("savedEntityLifeTimeCounter", savedEntityLifeTimeCounter);
+
+        /*for (Map.Entry<UUID, HashMap<String, Long>> entry : savedEntityLifeTimeCounter.entrySet()) {
             NbtCompound entryCompound = new NbtCompound();
             entryCompound.putUuid("UUID", entry.getKey());
 
@@ -41,42 +44,41 @@ public class EntityLifeTimeTable extends PersistentState {
 
             entryCompound.put("Values", innerDataCompound);
             list.add(entryCompound);
-        }
+        }*/
 
         nbt.put("DataList", list);
         return nbt;
     }
 
     // --- LOAD LOGIC ---
-    public static EntityLifeTimeTable fromNbt(NbtCompound nbt) {
-        EntityLifeTimeTable state = new EntityLifeTimeTable();
+    public static SavedEntityLifeTimeCounter fromNbt(NbtCompound nbt) {
+        SavedEntityLifeTimeCounter state = new SavedEntityLifeTimeCounter();
         NbtList list = nbt.getList("DataList", NbtElement.COMPOUND_TYPE);
 
         for (int i = 0; i < list.size(); i++) {
             NbtCompound entryCompound = list.getCompound(i);
-            UUID uuid = entryCompound.getUuid("UUID");
 
-            // Read the sub-compound back into a HashMap
+            /*// Read the sub-compound back into a HashMap
             NbtCompound innerDataCompound = entryCompound.getCompound("Values");
             HashMap<String, Long> innerMap = new HashMap<>();
 
             for (String key : innerDataCompound.getKeys()) {
                 long value = innerDataCompound.getLong(key);
                 innerMap.put(key, value);
-            }
+            }*/
 
-            state.entityLifeTimeTable.put(uuid, innerMap);
+            state.savedEntityLifeTimeCounter = entryCompound.getLong("Long");
         }
 
         return state;
     }
 
     // --- GETTER FOR WORLD ---
-    public static EntityLifeTimeTable get(ServerWorld world) {
+    public static SavedEntityLifeTimeCounter get(ServerWorld world) {
         return world.getPersistentStateManager().getOrCreate(
-                EntityLifeTimeTable::fromNbt,
-                EntityLifeTimeTable::new,
-                "entity_life_time_data"
+                SavedEntityLifeTimeCounter::fromNbt,
+                SavedEntityLifeTimeCounter::new,
+                "saved_entity_life_time_counter"
         );
     }
 }
