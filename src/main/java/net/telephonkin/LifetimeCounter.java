@@ -3,8 +3,7 @@ package net.telephonkin;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.telephonkin.data.EntityLifeTimeTable;
-import org.spongepowered.asm.mixin.Final;
-import net.minecraft.entity.Entity;
+
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,7 +22,7 @@ public class LifetimeCounter {
 		EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(world);
 		long timer = 0L;
 		//long time_now = server.getTicks();
-		long time_now;
+		//long time_now;
 		UUID currentEntityUUID = null;
 		LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
 
@@ -42,7 +41,7 @@ public class LifetimeCounter {
 						// Delete entity from table
 
 
-					};
+					}
 					// Set the next entity that will be despawned
 					Map.Entry<UUID, HashMap<String, Long>> first_entity = entity_birth_table.entityLifeTimeTable.entrySet().iterator().next();
 					currentEntityUUID = first_entity.getKey();
