@@ -84,7 +84,9 @@ public class EntityLifeTimeMod implements ModInitializer {
 			this.setTimer(0L);
 			this.setentity_birth_table(EntityLifeTimeTable.get(world));
 
-			//lifetimeCounter.processStart();
+			lifetimeCounter.processStart(
+					server
+			);
 		});
 
         LOGGER.info("Hello Fabric world!");
