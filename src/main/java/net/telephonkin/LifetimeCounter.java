@@ -16,12 +16,13 @@ public class LifetimeCounter {
 	// TODO make a EntityDespawner class which has 3 ways to despawn an entity: when player load chunk, when mod loads the chunk entity-to-despawn exist and the despawn, despawn through editing world data. Edit these modes via entity_lifetime_common_config.json5
 
 	public void processStart(
-			MinecraftServer server
+			MinecraftServer server,
+			HashMap<String,Integer> ENTITY_CONFIG
 	) {
 		ServerWorld world = server.getOverworld();
 		EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(world);
 		long timer = 0L;
-		//long time_now = server.getTicks();
+		long time_now = server.getTicks();
 		//long time_now;
 		UUID currentEntityUUID = null;
 		LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
@@ -39,13 +40,17 @@ public class LifetimeCounter {
 						// Entity exist, so call EntityDespawner
 
 						// Delete entity from table
-
+						entity_birth_table_as_table.remove(currentEntityUUID);
 
 					}
 					// Set the next entity that will be despawned
 					Map.Entry<UUID, HashMap<String, Long>> first_entity = entity_birth_table.entityLifeTimeTable.entrySet().iterator().next();
 					currentEntityUUID = first_entity.getKey();
+					String currentEntityType = "";
 					// Set the timer
+					if (time_now + timer <= entity_birth_table.getMap().get(currentEntityUUID).entrySet().iterator().next().getValue()) {
+						timer = ENTITY_CONFIG.get(currentEntityType);
+					}
 				}
 			}
 		}

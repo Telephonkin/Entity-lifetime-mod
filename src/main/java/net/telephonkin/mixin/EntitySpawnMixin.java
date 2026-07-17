@@ -1,8 +1,6 @@
 package net.telephonkin.mixin;
 
-import net.minecraft.network.ClientConnection;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.entity.Entity;
 import net.telephonkin.EntityLifeTimeMod;
@@ -15,7 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
@@ -30,7 +27,7 @@ public abstract class EntitySpawnMixin {
 	//@Unique
 	//private static final Logger LOGGER = LoggerFactory.getLogger("entity-lifetime-mod");
 	@Unique
-	private static HashMap<String, Integer> LOADED_MOD_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedConfig();
+	private static HashMap<String, Integer> LOADED_MOD_ENTITY_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig();
 
 	@Inject(method = "spawnEntity", at = @At("HEAD"))
 	public void onEntitySpawn(Entity entity, CallbackInfoReturnable<Boolean> cir) {
@@ -46,12 +43,12 @@ public abstract class EntitySpawnMixin {
 			String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
 
 			//LOGGER.info("ENTITY TYPE IS :{}", entityTypeString);
-			if (((Number) LOADED_MOD_CONFIG.get(entityTypeString)).intValue() != -1) {
+			if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
 				// Write data about entity UUID and birth time to the table
 				birthdate = server.getTicks();
 
 				entity_birth_table.setMap(putProperly(
-						LOADED_MOD_CONFIG,
+						LOADED_MOD_ENTITY_CONFIG,
 						entity_birth_table.getMap(),
 						entity,
 						entity.getUuid(),

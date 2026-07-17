@@ -4,7 +4,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.world.ServerWorld;
-import net.telephonkin.data.DefaultConfig;
+import net.telephonkin.data.DefaultEntityConfig;
 import net.telephonkin.data.EntityLifeTimeTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class EntityLifeTimeMod implements ModInitializer {
 	public static final String MOD_ID = "entity-lifetime-mod";
@@ -25,7 +24,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 	private ServerWorld world;
 	private long timer;
 	private EntityLifeTimeTable entity_birth_table;
-	private HashMap<String, Integer> LoadedConfig;
+	private HashMap<String, Integer> LoadedEntityConfig;
 	private final LifetimeCounter lifetimeCounter = new LifetimeCounter();
 
 	public ServerWorld getWorld() {
@@ -48,16 +47,16 @@ public class EntityLifeTimeMod implements ModInitializer {
 		return entity_birth_table;
 	}
 
-	public void setentity_birth_table(EntityLifeTimeTable entity_birth_table) {
+	public void set_entity_birth_table(EntityLifeTimeTable entity_birth_table) {
 		this.entity_birth_table = entity_birth_table;
 	}
 
-	public HashMap<String, Integer> getLoadedConfig() {
-		return LoadedConfig;
+	public HashMap<String, Integer> getLoadedEntityConfig() {
+		return LoadedEntityConfig;
 	}
 
-	public void setLoadedConfig(HashMap<String, Integer> loadedConfig) {
-		LoadedConfig = loadedConfig;
+	public void setLoadedEntityConfig(HashMap<String, Integer> loadedEntityConfig) {
+		LoadedEntityConfig = loadedEntityConfig;
 	}
 
 	public static EntityLifeTimeMod INSTANCE;
@@ -72,7 +71,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 		// Load the config data
 		try {
-			this.setLoadedConfig(DefaultConfig.config.loadConfig());
+			this.setLoadedEntityConfig(DefaultEntityConfig.config.loadEntityConfig());
 			//HashMap<String, Integer> loaded_config = DefaultConfig.config.loadConfig();
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
@@ -82,10 +81,11 @@ public class EntityLifeTimeMod implements ModInitializer {
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			this.setWorld(server.getOverworld());
 			this.setTimer(0L);
-			this.setentity_birth_table(EntityLifeTimeTable.get(world));
+			this.set_entity_birth_table(EntityLifeTimeTable.get(world));
 
 			lifetimeCounter.processStart(
-					server
+					server,
+					LoadedEntityConfig
 			);
 		});
 
