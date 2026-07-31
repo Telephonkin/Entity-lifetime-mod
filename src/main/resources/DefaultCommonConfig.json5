@@ -1,0 +1,9 @@
+// This config file represents mechanics that will be used
+{
+  // Despawner mode sets the way how entities should be despawned.
+  // 1 - loaded chunks despawer. Entities will be despawned only when they are at non-force-loaded chunks (the mod does not force load chunks).
+  //  It may produce heavy CPU load when many entities from unloaded chunks, which are going to be despawned, are loaded and then despawn.
+  "mode": 1,
+  // What does the mod should log:
+  // "spawns": log an entity spawn
+}

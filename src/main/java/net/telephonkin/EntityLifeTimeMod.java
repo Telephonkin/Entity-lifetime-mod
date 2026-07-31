@@ -2,10 +2,14 @@ package net.telephonkin;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.telephonkin.data.DefaultEntityConfig;
 import net.telephonkin.data.EntityLifeTimeTable;
+import net.telephonkin.data.SavedEntityLifeTimeCounter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +26,10 @@ public class EntityLifeTimeMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	private ServerWorld world;
-	private long timer;
 	private EntityLifeTimeTable entity_birth_table;
 	private HashMap<String, Integer> LoadedEntityConfig;
 	private final LifetimeCounter lifetimeCounter = new LifetimeCounter();
+	private SavedEntityLifeTimeCounter savedEntityLifeTimeCounter;
 
 	public ServerWorld getWorld() {
 		return this.world;
@@ -35,13 +39,13 @@ public class EntityLifeTimeMod implements ModInitializer {
 		this.world = world;
 	}
 
-	public long getTimer() {
-		return timer;
-	}
+	//public long getSavedEntityLifeTimeCounter() {
+	//	return savedEntityLifeTimeCounter.getValue();
+	//}
 
-	public void setTimer(long timer) {
-		this.timer = timer;
-	}
+	//public void setSavedEntityLifeTimeCounter(long timer) {
+	//	this.savedEntityLifeTimeCounter.setValue(timer);
+	//}
 
 	public EntityLifeTimeTable getentity_birth_table() {
 		return entity_birth_table;
@@ -76,17 +80,33 @@ public class EntityLifeTimeMod implements ModInitializer {
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
-
+		//SavedEntityLifeTimeCounter savedEntityLifeTimeCounter = SavedEntityLifeTimeCounter.get(world);
         // Triggered when a player finishes joining the server
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			this.setWorld(server.getOverworld());
-			this.setTimer(0L);
+			//this.setTimer(0L);
 			this.set_entity_birth_table(EntityLifeTimeTable.get(world));
-
+			System.out.println("start counter");
 			lifetimeCounter.processStart(
 					server,
 					LoadedEntityConfig
 			);
+		});
+
+		// Triggered when the server is shutting down
+		//ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+
+			//savedEntityLifeTimeCounter
+			// Your logic when the server is about to shut down
+			// Example: saving custom data, closing database connections
+		//});
+
+		// Delete entity when chunk, where it placed, loads
+
+		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+			if (!world.isClient() && entity instanceof Entity entity1) {
+
+			}
 		});
 
         LOGGER.info("Hello Fabric world!");
