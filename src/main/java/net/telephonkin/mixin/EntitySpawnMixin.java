@@ -41,8 +41,13 @@ public abstract class EntitySpawnMixin {
 			long birthdate;
 
 			String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
+			try {
+				System.out.println(((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue());
+			} catch (Exception e) {
+				System.out.println("failed to get and entity type: " + entityTypeString);
+			}
 
-			//LOGGER.info("ENTITY TYPE IS :{}", entityTypeString);
+
 			if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
 				// Write data about entity UUID and birth time to the table
 				birthdate = server.getTicks();
