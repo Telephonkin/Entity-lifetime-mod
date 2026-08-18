@@ -59,7 +59,6 @@ public class EntityLifeTimeTableProperPut {
                     }
                 }
             });
-            //System.out.println("output table" + output_reversed.reversed().toString());
             return new LinkedHashMap<UUID, HashMap<String, Long>>(output_reversed.reversed());
         }
     }

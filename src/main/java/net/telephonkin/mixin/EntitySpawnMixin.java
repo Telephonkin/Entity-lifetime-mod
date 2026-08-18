@@ -42,11 +42,10 @@ public abstract class EntitySpawnMixin {
 
 			String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
 			try {
-				System.out.println(((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue());
+				System.out.println("New spawned entity: " + entityTypeString + " UUID " + entity.getUuid().toString());
 			} catch (Exception e) {
 				System.out.println("failed to get and entity type: " + entityTypeString);
 			}
-
 
 			if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
 				// Write data about entity UUID and birth time to the table
@@ -64,10 +63,4 @@ public abstract class EntitySpawnMixin {
 		}
 
 	}
-
-	/*@Inject(method = "onPlayerConnect", at = @At("HEAD"))
-	private void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
-		// Your custom logic here
-		// Example: System.out.println(player.getName().getString() + " joined!");
-	}*/
 }
