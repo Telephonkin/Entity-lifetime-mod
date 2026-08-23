@@ -25,7 +25,6 @@ public abstract class EntitySpawnMixin {
 	@Shadow @Final private MinecraftServer server;
 
 	//@Unique
-	//private static final Logger LOGGER = LoggerFactory.getLogger("entity-lifetime-mod");
 	@Unique
 	private static HashMap<String, Integer> LOADED_MOD_ENTITY_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig();
 
@@ -41,11 +40,6 @@ public abstract class EntitySpawnMixin {
 			long birthdate;
 
 			String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
-			try {
-				System.out.println("New spawned entity: " + entityTypeString + " UUID " + entity.getUuid().toString());
-			} catch (Exception e) {
-				System.out.println("failed to get and entity type: " + entityTypeString);
-			}
 
 			if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
 				// Write data about entity UUID and birth time to the table
