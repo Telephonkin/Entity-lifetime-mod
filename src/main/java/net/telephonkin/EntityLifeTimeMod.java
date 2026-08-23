@@ -3,6 +3,7 @@ package net.telephonkin;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.world.ServerWorld;
 import net.telephonkin.data.DefaultEntityConfig;
@@ -86,9 +87,9 @@ public class EntityLifeTimeMod implements ModInitializer {
 		AtomicReference<UUID> currentEntityUUID = new AtomicReference<>(null);
 
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
-			ServerWorld world = server.getOverworld();
+			world = server.getOverworld();
 			SavedEntityLifeTimeCounter savedEntityLifeTimeCounter = SavedEntityLifeTimeCounter.get(world);
-			EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(world);
+			entity_birth_table = EntityLifeTimeTable.get(world);
 			LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
 			HashSet<UUID> toDespawnEntities = new HashSet<>();
 
@@ -170,9 +171,8 @@ public class EntityLifeTimeMod implements ModInitializer {
 							Number entity_lifetime_raw_1 = LoadedEntityConfig.get(entity_type_1);
 							Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
 							timer.set((long) entity_lifetime_raw_2.longValue());
-							savedEntityLifeTimeCounter.setValue(timer.get()
-							);
-							savedEntityLifeTimeCounter.markDirty();
+							//savedEntityLifeTimeCounter.setValue(timer.get());
+							//savedEntityLifeTimeCounter.markDirty();
 						} else {
 							// The second case
 							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
@@ -223,25 +223,24 @@ public class EntityLifeTimeMod implements ModInitializer {
 					}
 				} else {
 					timer.getAndDecrement();
-					savedEntityLifeTimeCounter.setValue(timer.get());
-					savedEntityLifeTimeCounter.markDirty();
+					//savedEntityLifeTimeCounter.setValue(timer.get());
+					//savedEntityLifeTimeCounter.markDirty();
 				}
 			}
 		});
 
 		// Triggered when the server is shutting down
-		//ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+		ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
 
-			//savedEntityLifeTimeCounter
-			// Your logic when the server is about to shut down
-			// Example: saving custom data, closing database connections
-		//});
+			savedEntityLifeTimeCounter.setValue(timer.get());
+			savedEntityLifeTimeCounter.markDirty();
+		// Example: saving custom data, closing database connections
+		});
 
 		// Delete entity when chunk, where it placed, loads
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
 			if (ToDespawnEntityCacheHashSet.get(world).getSet().contains(entity.getUuid())) {
 				// Delete entity from the world
-				System.out.println("entity got dispawned from loaded chunk " + entity.getType().toString() + " with UUID " + entity.getUuidAsString());
 				entity.discard();
 				// Remove entity from cache
 				ToDespawnEntityCacheHashSet.get(world).removeUUID(entity.getUuid());
