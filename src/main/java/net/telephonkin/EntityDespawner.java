@@ -2,7 +2,6 @@ package net.telephonkin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
-import net.telephonkin.data.EntityLifeTimeTable;
 import net.telephonkin.data.ToDespawnEntityCacheHashSet;
 
 public class EntityDespawner {
@@ -10,8 +9,6 @@ public class EntityDespawner {
             ServerWorld world,
             Entity entity
     ) {
-        EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(world);
-        ToDespawnEntityCacheHashSet toDespawnEntityCacheHashSet = ToDespawnEntityCacheHashSet.get(world);
 
         int pos_x = entity.getChunkPos().x;
         int pos_z = entity.getChunkPos().z;
