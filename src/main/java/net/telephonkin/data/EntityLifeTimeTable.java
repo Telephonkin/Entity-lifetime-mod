@@ -18,6 +18,10 @@ public class EntityLifeTimeTable extends PersistentState {
         return this.entityLifeTimeTable;
     }
 
+    public void removeItem(UUID entityUUID) {
+        this.entityLifeTimeTable.remove(entityUUID);
+    }
+
     public void setMap(LinkedHashMap<UUID, HashMap<String, Long>> input_map) {
         this.entityLifeTimeTable = input_map;
     }

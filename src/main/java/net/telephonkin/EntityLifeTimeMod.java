@@ -114,7 +114,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 		AtomicLong timer = new AtomicLong();
 		//long time_now = 0;
 		EntityDespawner entityDespawner = new EntityDespawner();
-		AtomicBoolean is_only_one_entity_to_set_timer = new AtomicBoolean(true);
+		//AtomicBoolean is_only_one_entity_to_set_timer = new AtomicBoolean(true);
 
 		AtomicReference<Map.Entry<UUID, HashMap<String, Long>>> first_entity = new AtomicReference<>();
 		AtomicReference<Map.Entry<UUID, HashMap<String, Long>>> second_entity = new AtomicReference<>(null);
@@ -124,13 +124,15 @@ public class EntityLifeTimeMod implements ModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
 			ServerWorld world = server.getOverworld();
 			SavedEntityLifeTimeCounter savedEntityLifeTimeCounter = SavedEntityLifeTimeCounter.get(world);
-			System.out.println("the time on the moment is "+timer);
+			System.out.println("Time on the moment is "+timer);
 			EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(world);
+			//System.out.println("" + entity_birth_table.getMap());
 			LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
-			System.out.println("the size of table is: "+entity_birth_table_as_table.size());
-
+			System.out.println("Size of table is: "+entity_birth_table_as_table.size());
+			HashSet<UUID> toDespawnEntities = new HashSet<>();
 
 			long time_now = server.getTicks();
+			long currentEntitySpawnTime = 0L;
 
 			// If entity_birth_table_as_table is empty - do nothing
 			if (entity_birth_table_as_table.isEmpty()) {
@@ -147,33 +149,68 @@ public class EntityLifeTimeMod implements ModInitializer {
 					//if (is_only_one_entity_to_set_timer.get() == false) {
 					if (currentEntityUUID.get() != null) {
 						// The first entity is defined (is in entity_birth_table_as_table), so let's despawn it
-						System.out.println("Mod is going to despawn entity" + currentEntityUUID.get());
-						// The first entiity exist, so call EntityDespawner
-						try {
-							entityDespawner.loadedChunksDespawner(
-									world,
-									//world.getEntity(currentEntityUUID.get())
-									Objects.requireNonNull(world.getEntity(currentEntityUUID.get()))
-							);
-						} catch (RuntimeException ignored) {}
-						System.out.println("Entity " + currentEntityUUID.get() + " was despawned");
-						// Delete entity from table
-						entity_birth_table_as_table.remove(currentEntityUUID.get());
+
+						// The first entity exist, so call EntityDespawner to despawn ALL entities with the same time of despawn
+						currentEntityUUID.set(first_entity.get().getKey());
+						// Make a list of all entities to despawn
+						entity_birth_table.getMap().forEach((entity_UUID_in_table, entity_params_in_table) -> {
+							// If this entity despawns in one time as first - add to the list
+							if (entity_UUID_in_table != first_entity.get().getKey()) {
+								String entity_type_in_table = entity_params_in_table.entrySet().iterator().next().getKey();
+								if (
+                                        Objects.equals(
+												entity_params_in_table.entrySet().iterator().next().getValue(),
+												entity_birth_table.getMap().get(currentEntityUUID.get()).entrySet().iterator().next().getValue())
+												&&
+												Objects.equals(
+														entity_type_in_table,
+														first_entity.get().getValue().entrySet().iterator().next().getKey()
+												)
+								) {
+									toDespawnEntities.add(entity_UUID_in_table);
+								}
+							}
+						});
+						toDespawnEntities.add(currentEntityUUID.get());
+						System.out.println("Mod is going to despawn entities" + toDespawnEntities);
+						// TODO finish for each loops
+
+						// Using toDespawnEntities list - despawn each entity
+
+						currentEntitySpawnTime = entity_birth_table.getMap().get(currentEntityUUID.get()).entrySet().iterator().next().getValue();
+						
+						toDespawnEntities.forEach(toDespawnEntity -> {
+							try {
+								entityDespawner.loadedChunksDespawner(
+										world,
+										//world.getEntity(currentEntityUUID.get())
+										Objects.requireNonNull(world.getEntity(toDespawnEntity))
+								);
+							} catch (RuntimeException ignored) {}
+							System.out.println("Entity " + toDespawnEntity + " was despawned");
+							// Delete entity from table
+							entity_birth_table.removeItem(toDespawnEntity);
+							entity_birth_table.markDirty();
+							//entity_birth_table_as_table.remove(toDespawnEntity);
+						});
+						toDespawnEntities.clear();
+
 						// After despawning entity, calculate the timer
 					}
-					currentEntityUUID.set(first_entity.get().getKey());
+
 					try {
-						second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table_as_table.entrySet().toArray()[1]);
+						second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table.getMap().entrySet().toArray()[1]);
 					} catch (RuntimeException ignored) {}
 					//is_only_one_entity_to_set_timer = false;
 					// Get the second entity in the name
 					if (second_entity.get() != null) {
-						second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table_as_table.entrySet().toArray()[1]);
+						second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table.getMap().entrySet().toArray()[1]);
 
 						// Set the timer
 						// The first case: second entity spawns after first entity despawns (in other words: time now <= birthdate of the second entity) - the timer equals the lifetime of the second entity
 						// The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
-						if (time_now <= entity_birth_table.getMap().get(currentEntityUUID.get()).entrySet().iterator().next().getValue()) {
+						System.out.println(entity_birth_table.getMap());
+						if (time_now <= currentEntitySpawnTime) {
 							// The first case
 							System.out.println("Set timer 1 case");
 							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
@@ -197,15 +234,27 @@ public class EntityLifeTimeMod implements ModInitializer {
 							String entity_type_2 = second_entity.get().getValue().keySet().iterator().next();
 							Number entity_lifetime_raw_1 = LoadedEntityConfig.get(entity_type_1);
 							Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
-							timer.set((long) entity_lifetime_raw_2.longValue()
-							 - (
-									time_now + (long) entity_lifetime_raw_1.longValue() - second_entity.get()
+							System.out.println("Second entity lives: "+ entity_lifetime_raw_2.longValue() + " Time now: " + time_now + " First entity live " + entity_lifetime_raw_1.longValue() + " Second entity spawn time: " + second_entity.get()
+									.getValue()
+									.entrySet()
+									.iterator()
+									.next()
+									.getValue());
+							timer.set(
+									(second_entity
+											.get()
 											.getValue()
 											.entrySet()
 											.iterator()
 											.next()
+											.getValue() -
+									first_entity
+											.get()
 											.getValue()
-							));
+											.entrySet()
+											.iterator()
+											.next()
+											.getValue()) + Math.abs(entity_lifetime_raw_1.longValue() - entity_lifetime_raw_2.longValue()));
 
 							savedEntityLifeTimeCounter.setValue(timer.get()
 									/*LoadedEntityConfig.get(
