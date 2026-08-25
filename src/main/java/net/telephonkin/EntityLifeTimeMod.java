@@ -92,6 +92,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 			entity_birth_table = EntityLifeTimeTable.get(world);
 			LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
 			HashSet<UUID> toDespawnEntities = new HashSet<>();
+			System.out.println("Timer now" + timer.get());
 
 			long time_now = server.getTicks();
 			long currentEntitySpawnTime = 0L;
@@ -171,8 +172,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 							Number entity_lifetime_raw_1 = LoadedEntityConfig.get(entity_type_1);
 							Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
 							timer.set((long) entity_lifetime_raw_2.longValue());
-							//savedEntityLifeTimeCounter.setValue(timer.get());
-							//savedEntityLifeTimeCounter.markDirty();
+
 						} else {
 							// The second case
 							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
@@ -198,7 +198,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 											.getValue())
 									+
 									Math.abs(entity_lifetime_raw_1.longValue() - entity_lifetime_raw_2.longValue()));
-
+							System.out.println(timer.get());
 							savedEntityLifeTimeCounter.setValue(timer.get());
 							savedEntityLifeTimeCounter.markDirty();
 						}
@@ -223,8 +223,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 					}
 				} else {
 					timer.getAndDecrement();
-					//savedEntityLifeTimeCounter.setValue(timer.get());
-					//savedEntityLifeTimeCounter.markDirty();
 				}
 			}
 		});
