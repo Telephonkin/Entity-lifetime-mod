@@ -92,10 +92,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 			entity_birth_table = EntityLifeTimeTable.get(world);
 			LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
 			HashSet<UUID> toDespawnEntities = new HashSet<>();
-			System.out.println("Timer now" + timer.get());
-
-			long time_now = server.getTicks();
-			long currentEntitySpawnTime = 0L;
 
 			// If entity_birth_table_as_table is empty - do nothing
 			if (entity_birth_table_as_table.isEmpty()) {
@@ -165,7 +161,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 						// Set the timer
 						// The first case: second entity spawns after first entity despawns (in other words: time now <= birthdate of the second entity) - the timer equals the lifetime of the second entity
 						// The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
-						if (time_now <= currentEntitySpawnTime) {
+						if (server.getTicks() <= 0L) {
 							// The first case
 							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
 							String entity_type_2 = second_entity.get().getValue().keySet().iterator().next();
