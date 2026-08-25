@@ -6,4 +6,7 @@
   "mode": 1,
   // What does the mod should log:
   // "spawns": log an entity spawn
+
+  // Can mod despawn tagged entity
+  "can_tagged_entity_despawn": false
 }
