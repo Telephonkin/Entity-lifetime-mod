@@ -10,8 +10,6 @@ import net.telephonkin.data.DefaultEntityConfig;
 import net.telephonkin.data.EntityLifeTimeTable;
 import net.telephonkin.data.SavedEntityLifeTimeCounter;
 import net.telephonkin.data.ToDespawnEntityCacheHashSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,30 +23,11 @@ public class EntityLifeTimeMod implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	private ServerWorld world;
 	private EntityLifeTimeTable entity_birth_table;
 	private HashMap<String, Integer> LoadedEntityConfig;
 	private SavedEntityLifeTimeCounter savedEntityLifeTimeCounter;
-	private HashSet<UUID> toDespawnEntityCacheHashSet;
-
-
-	public ServerWorld getWorld() {
-		return this.world;
-	}
-
-	public void setWorld(ServerWorld world) {
-		this.world = world;
-	}
-
-	public EntityLifeTimeTable getentity_birth_table() {
-		return entity_birth_table;
-	}
-
-	public void set_entity_birth_table(EntityLifeTimeTable entity_birth_table) {
-		this.entity_birth_table = entity_birth_table;
-	}
 
 	public HashMap<String, Integer> getLoadedEntityConfig() {
 		return LoadedEntityConfig;
@@ -57,9 +36,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 	public void setLoadedEntityConfig(HashMap<String, Integer> loadedEntityConfig) {
 		LoadedEntityConfig = loadedEntityConfig;
 	}
-
-	public ToDespawnEntityCacheHashSet getToDespawnEntityCacheHashSet(ServerWorld world){return ToDespawnEntityCacheHashSet.get(world);}
-
 
 	public static EntityLifeTimeMod INSTANCE;
 
@@ -73,7 +49,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 		// Load the config data
 		try {
 			this.setLoadedEntityConfig(DefaultEntityConfig.config.loadEntityConfig());
-			//HashMap<String, Integer> loaded_config = DefaultConfig.config.loadConfig();
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -85,6 +60,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 		AtomicReference<Map.Entry<UUID, HashMap<String, Long>>> second_entity = new AtomicReference<>(null);
 
 		AtomicReference<UUID> currentEntityUUID = new AtomicReference<>(null);
+		AtomicLong currentEntitySpawnTime = new AtomicLong();
 
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
 			world = server.getOverworld();
@@ -92,6 +68,8 @@ public class EntityLifeTimeMod implements ModInitializer {
 			entity_birth_table = EntityLifeTimeTable.get(world);
 			LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
 			HashSet<UUID> toDespawnEntities = new HashSet<>();
+
+			currentEntitySpawnTime.set(0L);
 
 			// If entity_birth_table_as_table is empty - do nothing
 			if (entity_birth_table_as_table.isEmpty()) {
@@ -103,7 +81,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 
 				if (timer.get() == 0L){
-					//if (is_only_one_entity_to_set_timer.get() == false) {
+
 					if (currentEntityUUID.get() != null) {
 						// The first entity is defined (is in entity_birth_table_as_table), so let's despawn it
 
@@ -132,7 +110,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 						// Using toDespawnEntities list - despawn each entity
 
-						currentEntitySpawnTime = entity_birth_table.getMap().get(currentEntityUUID.get()).entrySet().iterator().next().getValue();
+						currentEntitySpawnTime.set(entity_birth_table.getMap().get(currentEntityUUID.get()).entrySet().iterator().next().getValue());
 						
 						toDespawnEntities.forEach(toDespawnEntity -> {
 							try {
@@ -153,7 +131,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 					try {
 						second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table.getMap().entrySet().toArray()[1]);
 					} catch (RuntimeException ignored) {}
-					//is_only_one_entity_to_set_timer = false;
 					// Get the second entity in the name
 					if (second_entity.get() != null) {
 						second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table.getMap().entrySet().toArray()[1]);
@@ -163,11 +140,9 @@ public class EntityLifeTimeMod implements ModInitializer {
 						// The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
 						if (server.getTicks() <= 0L) {
 							// The first case
-							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
 							String entity_type_2 = second_entity.get().getValue().keySet().iterator().next();
-							Number entity_lifetime_raw_1 = LoadedEntityConfig.get(entity_type_1);
 							Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
-							timer.set((long) entity_lifetime_raw_2.longValue());
+							timer.set(entity_lifetime_raw_2.longValue());
 
 						} else {
 							// The second case
@@ -194,7 +169,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 											.getValue())
 									+
 									Math.abs(entity_lifetime_raw_1.longValue() - entity_lifetime_raw_2.longValue()));
-							System.out.println(timer.get());
 							savedEntityLifeTimeCounter.setValue(timer.get());
 							savedEntityLifeTimeCounter.markDirty();
 						}
@@ -209,7 +183,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 							String entity_type = first_entity.get().getValue().keySet().iterator().next();
 							Number entity_lifetime_raw = LoadedEntityConfig.get(entity_type);
 
-							timer.set((long) entity_lifetime_raw.longValue());
+							timer.set(entity_lifetime_raw.longValue());
 							currentEntityUUID.set(first_entity.get().getKey());
 
 							try {
