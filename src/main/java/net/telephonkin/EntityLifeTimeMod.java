@@ -226,7 +226,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 		});
 
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
-			//try {
+
 			MinecraftServer server = null;
 			if (entity.getWorld() instanceof ServerWorld serverWorld) {
 				server = serverWorld.getServer();
@@ -272,8 +272,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 														.getValue())
 												+
 												Math.abs(entity_lifetime_raw_1.longValue() - entity_lifetime_raw_2.longValue()));
-								//savedEntityLifeTimeCounter.setValue(timer.get());
-								//savedEntityLifeTimeCounter.markDirty();
 							}
 
 						} else {
@@ -291,7 +289,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 								}
 							}
 						}
-						System.out.println("Player killed an entity, timer is " + timer.get());
 					}
 				}
 			} catch (Exception e) {
@@ -308,11 +305,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 					} catch (RuntimeException ignored) {}
 				}
 			}
-			//} catch (RuntimeException e) {
-			//	System.out.println(Objects.requireNonNull(damageSource.getAttacker()).getType().toString());
-			//	System.out.println(Objects.requireNonNull(damageSource.getAttacker()).toString());
-			//	System.out.println(Objects.requireNonNull(damageSource.getSource()).toString());
-			//}
 		});
 	}
 }

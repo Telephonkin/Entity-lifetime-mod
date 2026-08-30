@@ -14,7 +14,6 @@ public class EntityDespawner {
     ) {
         AtomicReference<Entity> entity = new AtomicReference<>();
         server.getWorlds().forEach(world -> {
-            //entity.set(world.getEntity(entityUUID));
             if (world.getEntity(entityUUID) != null) {
                 entity.set(world.getEntity(entityUUID));
                 int pos_x = entity.get().getChunkPos().x;

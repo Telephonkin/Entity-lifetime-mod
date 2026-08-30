@@ -5,8 +5,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.entity.Entity;
 import net.telephonkin.EntityLifeTimeMod;
 import net.telephonkin.data.EntityLifeTimeTable;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,8 +29,6 @@ public abstract class EntitySpawnMixin {
 	public void onEntitySpawn(Entity entity, CallbackInfoReturnable<Boolean> cir) {
 		// Server-side logic, which represents entity natural spawn
 		if (!entity.getWorld().isClient()) {
-			//System.out.println("entity " + entity.getType().toString() + " spawned");
-			//Iterable<ServerWorld> worlds = server.getWorlds();
 			ServerWorld overworld = server.getOverworld();
 
 			EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(overworld);
@@ -51,7 +47,6 @@ public abstract class EntitySpawnMixin {
 							entity.getUuid(),
 							birthdate));
 					entity_birth_table.markDirty();
-					System.out.println(entityTypeString + " got spawned");
 				}
 			} catch (Exception e) {
 				System.out.println(entityTypeString);
