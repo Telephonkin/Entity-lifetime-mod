@@ -233,63 +233,63 @@ public class EntityLifeTimeMod implements ModInitializer {
 			}
 			try {
 				if (entity.getUuid() == first_entity.get().getKey() || entity.getUuid() == second_entity.get().getKey()) {
-					if (Objects.equals(Objects.requireNonNull(damageSource.getAttacker()).getType().toString(), "entity.minecraft.player")) {
-						// Remove entity from the table if a player kill it
-						entity_birth_table.removeItem(entity.getUuid());
-						// Recalculate timer
-						// The first case: second entity spawns after first entity despawns (in other words: time now <= birthdate of the second entity) - the timer equals the lifetime of the second entity
-						// The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
+					// Remove entity from the table if a player kill it
+					entity_birth_table.removeItem(entity.getUuid());
+					// Recalculate timer
+					// The first case: second entity spawns after first entity despawns (in other words: time now <= birthdate of the second entity) - the timer equals the lifetime of the second entity
+					// The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
 
-						if (second_entity.get() != null) {
-							if (server.getTicks() <= second_entity.get().getValue().entrySet().iterator().next().getValue()) {
-								// The first case
-								String entity_type_2 = second_entity.get().getValue().keySet().iterator().next();
-								Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
-								timer.set(entity_lifetime_raw_2.longValue());
-
-							} else {
-								// The second case
-								String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
-								String entity_type_2 = second_entity.get().getValue().keySet().iterator().next();
-								Number entity_lifetime_raw_1 = LoadedEntityConfig.get(entity_type_1);
-								Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
-
-								timer.set(
-										(second_entity
-												.get()
-												.getValue()
-												.entrySet()
-												.iterator()
-												.next()
-												.getValue()
-												-
-												first_entity
-														.get()
-														.getValue()
-														.entrySet()
-														.iterator()
-														.next()
-														.getValue())
-												+
-												Math.abs(entity_lifetime_raw_1.longValue() - entity_lifetime_raw_2.longValue()));
-							}
+					if (second_entity.get() != null) {
+						if (server.getTicks() <= second_entity.get().getValue().entrySet().iterator().next().getValue()) {
+							// The first case
+							String entity_type_2 = second_entity.get().getValue().keySet().iterator().next();
+							Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
+							timer.set(entity_lifetime_raw_2.longValue());
 
 						} else {
-							// This is the case when there is only one entity and timer is 0
-							if (timer.get() == 0L) {
-								String entity_type = first_entity.get().getValue().keySet().iterator().next();
-								Number entity_lifetime_raw = LoadedEntityConfig.get(entity_type);
+							// The second case
+							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
+							String entity_type_2 = second_entity.get().getValue().keySet().iterator().next();
+							Number entity_lifetime_raw_1 = LoadedEntityConfig.get(entity_type_1);
+							Number entity_lifetime_raw_2 = LoadedEntityConfig.get(entity_type_2);
 
-								timer.set(entity_lifetime_raw.longValue());
-								currentEntityUUID.set(first_entity.get().getKey());
+							timer.set(
+									(second_entity
+											.get()
+											.getValue()
+											.entrySet()
+											.iterator()
+											.next()
+											.getValue()
+											-
+											first_entity
+													.get()
+													.getValue()
+													.entrySet()
+													.iterator()
+													.next()
+													.getValue())
+											+
+											Math.abs(entity_lifetime_raw_1.longValue() - entity_lifetime_raw_2.longValue()));
+						}
+					} else {
+						// This is the case when there is only one entity and timer is 0
+						if (timer.get() == 0L) {
+							String entity_type = first_entity.get().getValue().keySet().iterator().next();
+							Number entity_lifetime_raw = LoadedEntityConfig.get(entity_type);
 
-								try {
-									second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table.getMap().entrySet().toArray()[1]);
-								} catch (RuntimeException ignored) {
-								}
+							timer.set(entity_lifetime_raw.longValue());
+							currentEntityUUID.set(first_entity.get().getKey());
+
+							try {
+								second_entity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table.getMap().entrySet().toArray()[1]);
+							} catch (RuntimeException ignored) {
 							}
 						}
 					}
+				} else {
+					entity_birth_table.removeItem(entity.getUuid());
+					entity_birth_table.markDirty();
 				}
 			} catch (Exception e) {
 				// This is the case when there is only one entity and timer is 0
