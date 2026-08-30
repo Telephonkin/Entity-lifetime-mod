@@ -32,6 +32,7 @@
   "minecraft:witch": 120000,
   "minecraft:wither": 120000,
   "minecraft:wither_skeleton":148000,
+  "minecraft:hoglin":68000,
   "minecraft:zoglin":78000,
   "minecraft:zombie":66000,
   "minecraft:zombie_villager":80000,

@@ -71,8 +71,9 @@ public class EntityLifeTimeMod implements ModInitializer {
 			LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
 			HashSet<UUID> toDespawnEntities = new HashSet<>();
 			currentEntitySpawnTime.set(0L);
-			System.out.println("timer is " + timer.get());
+			//System.out.println("timer is " + timer.get());
 			// If entity_birth_table_as_table is empty - do nothing
+			//System.out.println(timer);
 			if (entity_birth_table_as_table.isEmpty()) {
 				savedEntityLifeTimeCounter.setValue(0L);
 			} else {
@@ -115,10 +116,12 @@ public class EntityLifeTimeMod implements ModInitializer {
 						toDespawnEntities.forEach(toDespawnEntity -> {
 							try {
 								entityDespawner.loadedChunksDespawner(
-										world,
-										Objects.requireNonNull(world.getEntity(toDespawnEntity))
+										server,
+										toDespawnEntity
 								);
-							} catch (RuntimeException ignored) {}
+							} catch (RuntimeException e) {
+								throw e;
+							}
 							// Delete entity from table
 							entity_birth_table.removeItem(toDespawnEntity);
 							entity_birth_table.markDirty();
@@ -199,9 +202,12 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 		// Triggered when the server is shutting down
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+			world = server.getOverworld();
+
 			EntityLifeTimeTable.get(world).setMap(entity_birth_table.getMap());
 			EntityLifeTimeTable.get(world).markDirty();
 
+			savedEntityLifeTimeCounter = SavedEntityLifeTimeCounter.get(world);
 			savedEntityLifeTimeCounter.setValue(timer.get());
 			savedEntityLifeTimeCounter.markDirty();
 		// Example: saving custom data, closing database connections

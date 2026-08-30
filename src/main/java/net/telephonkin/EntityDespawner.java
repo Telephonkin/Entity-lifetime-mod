@@ -1,25 +1,37 @@
 package net.telephonkin;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.MinecraftServer;
 import net.telephonkin.data.ToDespawnEntityCacheHashSet;
+
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EntityDespawner {
     public void loadedChunksDespawner(
-            ServerWorld world,
-            Entity entity
+            MinecraftServer server,
+            UUID entityUUID
     ) {
-
-        int pos_x = entity.getChunkPos().x;
-        int pos_z = entity.getChunkPos().z;
-        // Check that the entity is in loaded chunk
-        if (!entity.getWorld().isClient()) {
-            if (world.isChunkLoaded(pos_x, pos_z)) {
-                entity.discard(); // It will only despawn an entity
+        AtomicReference<Entity> entity = new AtomicReference<>();
+        server.getWorlds().forEach(world -> {
+            //entity.set(world.getEntity(entityUUID));
+            if (world.getEntity(entityUUID) != null) {
+                entity.set(world.getEntity(entityUUID));
+                int pos_x = entity.get().getChunkPos().x;
+                int pos_z = entity.get().getChunkPos().z;
+                // Check that the entity is in loaded chunk
+                if (!entity.get().getWorld().isClient()) {
+                    if (world.isChunkLoaded(pos_x, pos_z)) {
+                        entity.get().discard(); // It will only despawn an entity
+                    }
+                } else {
+                    ToDespawnEntityCacheHashSet.get(world).addUUID(entityUUID);
+                    ToDespawnEntityCacheHashSet.get(world).markDirty();
+                }
+            } else {
+                ToDespawnEntityCacheHashSet.get(world).addUUID(entityUUID);
+                ToDespawnEntityCacheHashSet.get(world).markDirty();
             }
-        } else {
-            ToDespawnEntityCacheHashSet.get(world).addUUID(entity.getUuid());
-            ToDespawnEntityCacheHashSet.get(world).markDirty();
-        }
+        });
     }
 }
