@@ -3,6 +3,7 @@
   "package": "net.telephonkin.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "EntityNameMixin",
     "EntitySpawnMixin"
   ],
   "injectors": {
