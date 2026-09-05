@@ -265,58 +265,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 							server,
 							entity_birth_table
 					);
-					/*
-					// The first case: second entity spawns after first entity despawns (in other words: time now <= birthdate of the second entity) - the timer equals the lifetime of the second entity
-					// The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
-
-					if (secondEntity.get() != null) {
-						if (server.getTicks() <= secondEntity.get().getValue().entrySet().iterator().next().getValue()) {
-							// The first case
-							String entity_type_2 = secondEntity.get().getValue().keySet().iterator().next();
-							Number entity_lifetime_raw_2 = loadedEntityConfig.get(entity_type_2);
-							timer.set(entity_lifetime_raw_2.longValue());
-
-						} else {
-							// The second case
-							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
-							String entity_type_2 = secondEntity.get().getValue().keySet().iterator().next();
-							Number entity_lifetime_raw_1 = loadedEntityConfig.get(entity_type_1);
-							Number entity_lifetime_raw_2 = loadedEntityConfig.get(entity_type_2);
-
-							timer.set(
-									(secondEntity
-											.get()
-											.getValue()
-											.entrySet()
-											.iterator()
-											.next()
-											.getValue()
-											-
-											first_entity
-													.get()
-													.getValue()
-													.entrySet()
-													.iterator()
-													.next()
-													.getValue())
-											+
-											Math.abs(entity_lifetime_raw_1.longValue() - entity_lifetime_raw_2.longValue()));
-						}
-					} else {
-						// This is the case when there is only one entity and timer is 0
-						if (timer.get() == 0L) {
-							String entity_type = first_entity.get().getValue().keySet().iterator().next();
-							Number entity_lifetime_raw = loadedEntityConfig.get(entity_type);
-
-							timer.set(entity_lifetime_raw.longValue());
-							currentEntityUUID.set(first_entity.get().getKey());
-
-							try {
-								secondEntity.set((Map.Entry<UUID, HashMap<String, Long>>) entity_birth_table.getMap().entrySet().toArray()[1]);
-							} catch (RuntimeException ignored) {
-							}
-						}
-					}*/
 				} else {
 					entity_birth_table.removeItem(entity.getUuid());
 					entity_birth_table.markDirty();
