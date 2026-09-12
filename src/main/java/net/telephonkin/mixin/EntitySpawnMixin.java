@@ -1,5 +1,7 @@
 package net.telephonkin.mixin;
 
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.TntEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.entity.Entity;
@@ -29,28 +31,47 @@ public abstract class EntitySpawnMixin {
 	public void onEntitySpawn(Entity entity, CallbackInfoReturnable<Boolean> cir) {
 		// Server-side logic, which represents entity natural spawn
 		if (!entity.getWorld().isClient()) {
-			ServerWorld overworld = server.getOverworld();
+			System.out.println(entity.getType());
 
-			EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(overworld);
-			long birthdate;
+			if (entity instanceof TntEntity tntEntity || entity instanceof ItemEntity itemEntity) {
+				// Do nothing here; go to TntEntityMixin
+				//if (LOADED_MOD_ENTITY_CONFIG.get("minecraft:tnt") != -1) {
+				//	Number tntLifetime = LOADED_MOD_ENTITY_CONFIG.get("minecraft:tnt");
+					//System.out.println("TNT was spawned, time is: " + LOADED_MOD_ENTITY_CONFIG.get("minecraft:tnt"));
+				//	//tntEntity.setFuse(tntLifetime.intValue());
+				//	tntEntity.setFuse(200);
+				//}
 
-			String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
-			try {
-				if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
-					// Write data about entity UUID and birth time to the table
-					birthdate = server.getTicks();
+			//} else if (entity instanceof ItemEntity itemEntity) {
+			//	if (((Number)LOADED_MOD_ENTITY_CONFIG.get("minecraft:item")).intValue() != -1) {
+			//			Number itemLifetime = LOADED_MOD_ENTITY_CONFIG.get("minecraft:item");
+			//			System.out.println("Item was spawned, time is: " + itemLifetime.intValue());
+			//			itemEntity.age = itemLifetime.intValue();
+			//		}
+			} else {
+					ServerWorld overworld = server.getOverworld();
 
-					entity_birth_table.setMap(putProperly(
-							LOADED_MOD_ENTITY_CONFIG,
-							entity_birth_table.getMap(),
-							entity,
-							entity.getUuid(),
-							birthdate));
-					entity_birth_table.markDirty();
+					EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(overworld);
+					long birthdate;
+
+					String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
+					try {
+						if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
+							// Write data about entity UUID and birth time to the table
+							birthdate = server.getTicks();
+
+							entity_birth_table.setMap(putProperly(
+									LOADED_MOD_ENTITY_CONFIG,
+									entity_birth_table.getMap(),
+									entity,
+									entity.getUuid(),
+									birthdate));
+							entity_birth_table.markDirty();
+						}
+					} catch (Exception e) {
+						System.out.println(entityTypeString);
+					}
 				}
-			} catch (Exception e) {
-				System.out.println(entityTypeString);
 			}
 		}
 	}
-}

@@ -85,6 +85,8 @@ public class EntityLifeTimeMod implements ModInitializer {
 			throw new RuntimeException(e);
 		}
 
+
+
 		EntityDespawner entityDespawner = new EntityDespawner();
 		AtomicReference<UUID> currentEntityUUID = new AtomicReference<>(null);
 		AtomicLong currentEntitySpawnTime = new AtomicLong();

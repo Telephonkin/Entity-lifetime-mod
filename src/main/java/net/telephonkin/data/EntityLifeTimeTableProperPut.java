@@ -1,10 +1,6 @@
 package net.telephonkin.data;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import it.unimi.dsi.fastutil.Hash;
 import net.minecraft.entity.Entity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
@@ -19,8 +15,6 @@ public class EntityLifeTimeTableProperPut {
             Entity entity,
             UUID to_put_uuid,
             Long to_put_birth_time)  {
-
-
         LinkedHashMap<UUID, HashMap<String, Long>> reversed_entity_list = new LinkedHashMap<UUID, HashMap<String, Long>>(input_map.reversed());
         LinkedHashMap<UUID, HashMap<String, Long>> output_reversed = new LinkedHashMap<UUID, HashMap<String, Long>>();
 

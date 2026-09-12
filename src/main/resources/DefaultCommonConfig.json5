@@ -8,5 +8,9 @@
   // "spawns": log an entity spawn
 
   // Can mod despawn tagged entity
-  "can_tagged_entity_despawn": false
+  "tagged_entities_can_despawn": false,
+
+  // Can items live forever
+  "items_live_forever": false,
+
 }

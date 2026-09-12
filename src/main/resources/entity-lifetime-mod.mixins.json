@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "EntityNameMixin",
-    "EntitySpawnMixin"
+    "EntitySpawnMixin",
+    "ItemEntityAgeMixin",
+    "TntEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
