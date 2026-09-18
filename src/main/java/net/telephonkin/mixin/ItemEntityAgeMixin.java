@@ -23,9 +23,13 @@ public class ItemEntityAgeMixin {
         ItemEntity itemEntity = (ItemEntity) (Object) this;
         // Ensure we are operating on the server logic side
         if (!itemEntity.getWorld().isClient()) {
+            // So when an item achieves age as it set in entity config - discard it
             if (((Number) LOADED_MOD_ENTITY_CONFIG.get("minecraft:item")).intValue() != -1) {
                 if (itemEntity.getItemAge() >= (((Number) LOADED_MOD_ENTITY_CONFIG.get("minecraft:item")).intValue())) {
                     itemEntity.discard();
+                } else {
+                    // Otherwise, if age is set to -1 - it should live forever
+                    this.itemAge = -32768;
                 }
             }
         }
