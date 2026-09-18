@@ -11,6 +11,6 @@
   "tagged_entities_can_despawn": false,
 
   // Can items live forever
-  "items_live_forever": false,
+  "items_live_forever": false
 
 }

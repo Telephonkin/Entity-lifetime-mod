@@ -8,10 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
-import net.telephonkin.data.DefaultEntityConfig;
-import net.telephonkin.data.EntityLifeTimeTable;
-import net.telephonkin.data.SavedEntityLifeTimeCounter;
-import net.telephonkin.data.ToDespawnEntityCacheHashSet;
+import net.telephonkin.data.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,14 +19,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class EntityLifeTimeMod implements ModInitializer {
 	public static final String MOD_ID = "entity-lifetime-mod";
 
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-
 	private ServerWorld world;
 	private EntityLifeTimeTable entity_birth_table;
 	private HashMap<String, Integer> loadedEntityConfig;
-	private SavedEntityLifeTimeCounter savedEntityLifeTimeCounter;
+	private HashMap<String, Object> loadedCommonConfig;
+    private SavedEntityLifeTimeCounter savedEntityLifeTimeCounter;
 
 	public HashMap<String, Integer> getLoadedEntityConfig() {
 		return loadedEntityConfig;
@@ -38,6 +32,12 @@ public class EntityLifeTimeMod implements ModInitializer {
 	public void setLoadedEntityConfig(HashMap<String, Integer> loadedEntityConfig) {
 		this.loadedEntityConfig = loadedEntityConfig;
 	}
+
+	public HashMap<String, Object> getLoadedCommonConfig() {return loadedCommonConfig;}
+
+	public void setLoadedCommonConfig(HashMap<String, Object> loadedCommonConfig) {
+		this.loadedCommonConfig = loadedCommonConfig;
+    }
 
 	public AtomicLong getTimer() {
 		return timer;
@@ -63,7 +63,6 @@ public class EntityLifeTimeMod implements ModInitializer {
 		secondEntity.set(input_value.get());
 	}
 
-
 	public AtomicLong timer = new AtomicLong();
 	public AtomicReference<UUID> currentEntityUUID = new AtomicReference<>(null);
 
@@ -78,14 +77,19 @@ public class EntityLifeTimeMod implements ModInitializer {
 		// Proceed with mild caution.
 		INSTANCE = this;
 
-		// Load the config data
+		// Load the entity config data
 		try {
 			this.setLoadedEntityConfig(DefaultEntityConfig.config.loadEntityConfig());
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 
-
+		// Load the common config data
+		try {
+			this.setLoadedCommonConfig(DefaultCommonConfig.config.loadCommonConfig());
+		} catch (IOException | URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
 
 		EntityDespawner entityDespawner = new EntityDespawner();
 		AtomicReference<UUID> currentEntityUUID = new AtomicReference<>(null);
@@ -98,9 +102,8 @@ public class EntityLifeTimeMod implements ModInitializer {
 			LinkedHashMap<UUID, HashMap<String, Long>> entity_birth_table_as_table = entity_birth_table.entityLifeTimeTable;
 			HashSet<UUID> toDespawnEntities = new HashSet<>();
 			currentEntitySpawnTime.set(0L);
-			//System.out.println("timer is " + timer.get());
+
 			// If entity_birth_table_as_table is empty - do nothing
-			//System.out.println(timer);
 			if (entity_birth_table_as_table.isEmpty()) {
 				savedEntityLifeTimeCounter.setValue(0L);
 			} else {

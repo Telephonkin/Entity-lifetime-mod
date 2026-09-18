@@ -3,9 +3,11 @@ package net.telephonkin.mixin;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
+import net.telephonkin.EntityLifeTimeMod;
 import net.telephonkin.TimerRecalculator;
 import net.telephonkin.data.EntityLifeTimeTable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -17,37 +19,41 @@ import java.util.UUID;
 @Mixin(Entity.class)
 public class EntityNameMixin {
 
+    @Unique
+    private boolean COMMON_CONFIG_IS_NAMING_ACCEPTED = (Boolean) EntityLifeTimeMod.INSTANCE.getLoadedCommonConfig().get("tagged_entities_can_despawn");
+
     @Inject(method = "setCustomName", at = @At("HEAD"))
     private void onSetCustomName(Text name, CallbackInfo ci) {
         // When entity got named - delete from the table
         Entity entity = (Entity) (Object) this;
         TimerRecalculator timerRecalculator = new TimerRecalculator();
         if (!entity.getWorld().isClient()) {
-            UUID entityUUID = entity.getUuid();
+            // At first, check that in common config user set tagged_entities_can_despawn param to false
+            if (!COMMON_CONFIG_IS_NAMING_ACCEPTED) {
+                UUID entityUUID = entity.getUuid();
 
-            MinecraftServer server = entity.getServer();
-            EntityLifeTimeTable entityLifeTimeTable = EntityLifeTimeTable.get(server.getOverworld());
+                MinecraftServer server = entity.getServer();
+                EntityLifeTimeTable entityLifeTimeTable = EntityLifeTimeTable.get(server.getOverworld());
 
-            Map.Entry<UUID, HashMap<String, Long>> first_entity = (Map.Entry<UUID, HashMap<String, Long>>) entityLifeTimeTable.getMap().entrySet().toArray()[0];
-            Map.Entry<UUID, HashMap<String, Long>> second_entity = (Map.Entry<UUID, HashMap<String, Long>>) entityLifeTimeTable.getMap().entrySet().toArray()[1];
+                Map.Entry<UUID, HashMap<String, Long>> first_entity = (Map.Entry<UUID, HashMap<String, Long>>) entityLifeTimeTable.getMap().entrySet().toArray()[0];
+                Map.Entry<UUID, HashMap<String, Long>> second_entity = (Map.Entry<UUID, HashMap<String, Long>>) entityLifeTimeTable.getMap().entrySet().toArray()[1];
 
-            // Check that this entity is not first or second entity in the table, otherwise - recalculate timer
-            if (
-                    first_entity.getKey() == entityUUID
-                    || second_entity.getKey() == entityUUID
-            ) {
-                // Recalculate timer
+                // Check that this entity is not first or second entity in the table, otherwise - recalculate timer
+                if (
+                        first_entity.getKey() == entityUUID
+                                || second_entity.getKey() == entityUUID
+                ) {
+                    // Recalculate timer
 
-                timerRecalculator.process(
-                        server,
-                        entityLifeTimeTable
-                );
-            } else {
-                entityLifeTimeTable.removeItem(entityUUID);
-                entityLifeTimeTable.markDirty();
+                    timerRecalculator.process(
+                            server,
+                            entityLifeTimeTable
+                    );
+                } else {
+                    entityLifeTimeTable.removeItem(entityUUID);
+                    entityLifeTimeTable.markDirty();
+                }
             }
-
-
         }
     }
 }
