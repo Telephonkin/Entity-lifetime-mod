@@ -31,23 +31,9 @@ public abstract class EntitySpawnMixin {
 	public void onEntitySpawn(Entity entity, CallbackInfoReturnable<Boolean> cir) {
 		// Server-side logic, which represents entity natural spawn
 		if (!entity.getWorld().isClient()) {
-			System.out.println(entity.getType());
 
 			if (entity instanceof TntEntity tntEntity || entity instanceof ItemEntity itemEntity) {
 				// Do nothing here; go to TntEntityMixin
-				//if (LOADED_MOD_ENTITY_CONFIG.get("minecraft:tnt") != -1) {
-				//	Number tntLifetime = LOADED_MOD_ENTITY_CONFIG.get("minecraft:tnt");
-					//System.out.println("TNT was spawned, time is: " + LOADED_MOD_ENTITY_CONFIG.get("minecraft:tnt"));
-				//	//tntEntity.setFuse(tntLifetime.intValue());
-				//	tntEntity.setFuse(200);
-				//}
-
-			//} else if (entity instanceof ItemEntity itemEntity) {
-			//	if (((Number)LOADED_MOD_ENTITY_CONFIG.get("minecraft:item")).intValue() != -1) {
-			//			Number itemLifetime = LOADED_MOD_ENTITY_CONFIG.get("minecraft:item");
-			//			System.out.println("Item was spawned, time is: " + itemLifetime.intValue());
-			//			itemEntity.age = itemLifetime.intValue();
-			//		}
 			} else {
 					ServerWorld overworld = server.getOverworld();
 
@@ -68,9 +54,7 @@ public abstract class EntitySpawnMixin {
 									birthdate));
 							entity_birth_table.markDirty();
 						}
-					} catch (Exception e) {
-						System.out.println(entityTypeString);
-					}
+					} catch (Exception e) {}
 				}
 			}
 		}

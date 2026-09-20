@@ -109,8 +109,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 						.toString()
 						.replace("entity.","")
 						.replace(".",":");
-				//System.out.println(entityTypeAsString);
-				//System.out.println(!entityTypesInConfig.contains(entityTypeAsString));
+
 				if (!entityTypesInConfig.contains(entityTypeAsString)) {
 					entityTypesNotInConfig.add(entityTypeAsString);
 				}
