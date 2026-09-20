@@ -1,13 +1,20 @@
 package net.telephonkin;
 
+import com.sun.jdi.InconsistentDebugInfoException;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.crash.CrashException;
+import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.crash.CrashReportSection;
 import net.telephonkin.data.*;
 
 import java.io.IOException;
@@ -90,6 +97,36 @@ public class EntityLifeTimeMod implements ModInitializer {
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
+
+		HashSet<String> entityTypesInConfig =  new HashSet<String>(this.loadedEntityConfig.keySet());
+		HashSet<String> entityTypesNotInConfig = new HashSet<String>();
+		// This event starts right after the server finishes starting up and loading all worlds
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			// Loop through all globally registered entity types (inherently includes modded entities)
+			for (EntityType<?> entityType : Registries.ENTITY_TYPE) {
+				// If an entity type is not in entity config - add it to set of entity types that are not in the entity config file
+				String entityTypeAsString = entityType
+						.toString()
+						.replace("entity.","")
+						.replace(".",":");
+				//System.out.println(entityTypeAsString);
+				//System.out.println(!entityTypesInConfig.contains(entityTypeAsString));
+				if (!entityTypesInConfig.contains(entityTypeAsString)) {
+					entityTypesNotInConfig.add(entityTypeAsString);
+				}
+			}
+			// Check that container of entity types that are not in entity config is empty
+			if (!entityTypesNotInConfig.isEmpty()) {
+
+				CrashReport report = CrashReport.create(new InconsistentDebugInfoException(),"Entity LifeTime Mod Crash: ");
+				CrashReportSection section = report.addElement("Bad config");
+
+				section.add("The entity config does not have these entities lifetime properties", entityTypesNotInConfig.toString());
+
+				throw new CrashException(report);
+
+			}
+		});
 
 		EntityDespawner entityDespawner = new EntityDespawner();
 		AtomicReference<UUID> currentEntityUUID = new AtomicReference<>(null);

@@ -2,6 +2,7 @@
 // Feel free to add your modded entities here
 {
   // Vanilla
+  "minecraft:player": -1,
   // Hostile mobs
   "minecraft:blaze": 40000,
   "minecraft:cave_spider": 34000,
@@ -29,14 +30,17 @@
   "minecraft:stray": 48000,
   "minecraft:vex":10000,
   "minecraft:vindicator":120000,
+  "minecraft:illusioner":160000,
   "minecraft:witch": 120000,
   "minecraft:wither": 120000,
   "minecraft:wither_skeleton":148000,
   "minecraft:hoglin":68000,
   "minecraft:zoglin":78000,
   "minecraft:zombie":66000,
+  "minecraft:giant": -1,
   "minecraft:zombie_villager":80000,
   "minecraft:zombified_piglin":68000,
+  "minecraft:warden": -1,
   //Passive & Neutral mobs
   "minecraft:allay":-1,
   "minecraft:axolotl":120000,
@@ -55,7 +59,9 @@
   "minecraft:goat":80000,
   "minecraft:horse":86000,
   "minecraft:iron_golem":-1,
+  "minecraft:snow_golem": -1,
   "minecraft:llama": 88000,
+  "minecraft:trader_llama": 88000,
   "minecraft:mooshroom":85000,
   "minecraft:mule": 88000,
   "minecraft:ocelot":45000,
@@ -99,6 +105,10 @@
   "minecraft:trident":-1,
   "minecraft:wither_skull":-1,
   "minecraft:experience_bottle":-1,
+  "minecraft:item_frame": -1,
+  "minecraft:glow_item_frame": -1,
+  "minecraft:end_crystal": -1,
+
   //VehiclesRideable or transport-based entities
   "minecraft:boat":-1,
   "minecraft:chest_boat":-1,
