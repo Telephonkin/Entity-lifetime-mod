@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -27,10 +29,24 @@ public abstract class EntitySpawnMixin {
 	@Unique
 	private static HashMap<String, Integer> LOADED_MOD_ENTITY_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig();
 
+	@Unique
+	private static HashMap<String, Object> LOADED_MOD_COMMON_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedCommonConfig();
+
+	@Unique
+	private static final Logger LOGGER = LoggerFactory.getLogger("Entity Lifetime");
+
 	@Inject(method = "spawnEntity", at = @At("HEAD"))
 	public void onEntitySpawn(Entity entity, CallbackInfoReturnable<Boolean> cir) {
 		// Server-side logic, which represents entity natural spawn
 		if (!entity.getWorld().isClient()) {
+
+			// Common setting entity spawn logging
+			// Convert ArrayList to HashSet
+			List<String> logsConfigAsList = (ArrayList<String>) LOADED_MOD_COMMON_CONFIG.get("logs");
+			HashSet<String> logsConfig = new HashSet<String>(logsConfigAsList);
+			if (logsConfig.contains("spawn")) {
+				LOGGER.info("Spawned at time " + server.getOverworld().getTime() + " Entity with a type " + entity.getType().toString() + " and UUID " + entity.getUuid().toString());
+			}
 
 			if (entity instanceof TntEntity tntEntity || entity instanceof ItemEntity itemEntity) {
 				// Do nothing here; go to TntEntityMixin
@@ -44,7 +60,7 @@ public abstract class EntitySpawnMixin {
 					try {
 						if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
 							// Write data about entity UUID and birth time to the table
-							birthdate = server.getTicks();
+							birthdate = overworld.getTime();
 
 							entity_birth_table.setMap(putProperly(
 									LOADED_MOD_ENTITY_CONFIG,

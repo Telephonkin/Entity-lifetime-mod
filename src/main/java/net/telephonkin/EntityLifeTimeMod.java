@@ -207,7 +207,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 						// Set the timer
 						// The first case: second entity spawns after first entity despawns (in other words: time now <= birthdate of the second entity) - the timer equals the lifetime of the second entity
 						// The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
-						if (server.getTicks() <= secondEntity.get().getValue().entrySet().iterator().next().getValue()) {
+						if (server.getOverworld().getTime() <= secondEntity.get().getValue().entrySet().iterator().next().getValue()) {
 							// The first case
 							String entity_type_2 = secondEntity.get().getValue().keySet().iterator().next();
 							Number entity_lifetime_raw_2 = loadedEntityConfig.get(entity_type_2);

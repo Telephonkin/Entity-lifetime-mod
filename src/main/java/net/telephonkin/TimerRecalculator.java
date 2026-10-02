@@ -18,7 +18,7 @@ public class TimerRecalculator {
         // The second case: the opposite one (the timer equals the time second entity lives - (time of the first entity despawn - time of the second entity birth ))
 
         if (EntityLifeTimeMod.INSTANCE.getSecondEntity() != null) {
-            if (server.getTicks() <= EntityLifeTimeMod.INSTANCE.getSecondEntity().get().getValue().entrySet().iterator().next().getValue()) {
+            if (server.getOverworld().getTime() <= EntityLifeTimeMod.INSTANCE.getSecondEntity().get().getValue().entrySet().iterator().next().getValue()) {
                 // The first case
                 String entity_type_2 = EntityLifeTimeMod.INSTANCE.getSecondEntity().get().getValue().keySet().iterator().next();
                 Number entity_lifetime_raw_2 = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type_2);
