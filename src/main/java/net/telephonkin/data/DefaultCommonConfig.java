@@ -1,13 +1,13 @@
 package net.telephonkin.data;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,15 +33,14 @@ public class DefaultCommonConfig {
         } else {
             // Take file DefaultCommonConfig.json5 from same directory and create it in config directory;
             // Use config from this DefaultCommonConfig.json5 file
-            URL DefaultConfigFile = DefaultCommonConfig.class.getResource("/DefaultCommonConfig.json5");
+            InputStream DefaultConfigFilePath = DefaultCommonConfig.class.getResourceAsStream("/DefaultEntityConfig.json5");
+            InputStreamReader reader = new InputStreamReader(DefaultConfigFilePath, StandardCharsets.UTF_8);
+            java.lang.reflect.Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
 
-            assert DefaultConfigFile != null; // Ensure that there is DefaultCommonConfig.json5
-
-            Path DefaultConfigFilePath = Paths.get(DefaultConfigFile.toURI());
             Gson gson = new Gson();
 
             // Casting config to proper HashMap type
-            Map default_vanilla_common_config_map_as_map = gson.fromJson(Files.readString(DefaultConfigFilePath), Map.class); // Use this Map as config for entities lifetime
+            Map default_vanilla_common_config_map_as_map = gson.fromJson(reader, mapType); // Use this Map as config for common config
             Map<String, Object> default_vanilla_common_config_map_unraw = (Map<String, Object>) default_vanilla_common_config_map_as_map;
             HashMap<String, Object> default_vanilla_common_config_map = new HashMap<String, Object>(default_vanilla_common_config_map_unraw);
 
