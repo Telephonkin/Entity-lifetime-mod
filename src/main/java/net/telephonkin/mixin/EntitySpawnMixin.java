@@ -48,9 +48,7 @@ public abstract class EntitySpawnMixin {
 				LOGGER.info("Spawned at time " + server.getOverworld().getTime() + " Entity with a type " + entity.getType().toString() + " and UUID " + entity.getUuid().toString());
 			}
 
-			if (entity instanceof TntEntity tntEntity || entity instanceof ItemEntity itemEntity) {
-				// Do nothing here; go to TntEntityMixin
-			} else {
+			if (!(entity instanceof TntEntity tntEntity || entity instanceof ItemEntity itemEntity)){// Do nothing here; go to TntEntityMixin
 					ServerWorld overworld = server.getOverworld();
 
 					EntityLifeTimeTable entity_birth_table = EntityLifeTimeTable.get(overworld);
