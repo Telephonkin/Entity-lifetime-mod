@@ -1,7 +1,5 @@
 package net.telephonkin.data;
 
-import net.telephonkin.data.CastLinkedTreeMapToHashMap;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.fabricmc.loader.api.FabricLoader;

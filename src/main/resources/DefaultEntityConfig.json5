@@ -1,469 +1,663 @@
-// Place time in minecraft ticks, -1 means that this entity type will live forever
 // Default config format for each entity is:
 // "entity_name": {
 //    "lifetime": *integer* // -1 means that this entity type will live forever, no need to write "despawn_type" field
-//    "despawn_type": *string* //"kill" - when this entity will be going to despawn, it will be killed; "discard" - discarded
+//    "despawn_type": *string* //"kill" -- when this entity will be going to despawn, it will be killed; "discard" -- discarded (no kill animation and loot of killing); if lifetime is -1 -- do NOT write this property
+//    "logs": ["spawn", "despawn"] // only these two event-to-log are available. If an entity has lifetime -1 -- the mod will NOT let "despawn" be here; can be empty fully empty
+//    "can_tagged_entities_despawn": *bool* // can entities with tag names be despawned: true - yes, they will be despawned; false - no, they will NOT be despawned; if lifetime is -1 -- do NOT write this property
 //}
 // Feel free to add your modded entities here
 {
   // Vanilla
   "minecraft:player": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   // Hostile mobs
   "minecraft:blaze": {
     "lifetime": 40000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:cave_spider": {
     "lifetime": 34000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:spider": {
     "lifetime": 40000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:creeper": {
     "lifetime": 38000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:drowned": {
     "lifetime": 42000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:elder_guardian": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:ender_dragon": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:enderman": {
     "lifetime": 60000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:endermite": {
     "lifetime": 22000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:evoker": {
     "lifetime": 120000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:ghast": {
     "lifetime": 32000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:guardian": {
     "lifetime": 30000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:husk": {
     "lifetime": 42000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:magma_cube": {
     "lifetime": 20000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:phantom": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:piglin": {
     "lifetime": 80000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:piglin_brute": {
     "lifetime": 140000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:pillager": {
     "lifetime": 120000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:ravager": {
     "lifetime": 120000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:shulker": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:silverfish": {
     "lifetime": 10000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:skeleton": {
     "lifetime": 34000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:slime": {
     "lifetime": 24000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:stray": {
     "lifetime": 48000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:vex": {
     "lifetime": 10000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:vindicator": {
     "lifetime": 120000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:illusioner": {
     "lifetime": 160000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:witch": {
     "lifetime": 120000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:wither": {
     "lifetime": 120000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:wither_skeleton": {
     "lifetime": 148000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:hoglin": {
     "lifetime": 68000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:zoglin": {
     "lifetime": 78000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:zombie": {
     "lifetime": 66000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:giant": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:zombie_villager": {
     "lifetime": 80000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:zombified_piglin": {
     "lifetime": 68000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:warden": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   //Passive & Neutral mobs
   "minecraft:allay": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:axolotl": {
     "lifetime": 120000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:bat": {
     "lifetime": 24000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:bee": {
     "lifetime": 52000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:camel": {
     "lifetime": 98000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:cat": {
     "lifetime": 80000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:chicken": {
     "lifetime": 20000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:cod": {
     "lifetime": 10000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:cow": {
     "lifetime": 80000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:dolphin": {
     "lifetime": 50000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:donkey": {
     "lifetime": 96000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:fox": {
     "lifetime": 46000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:frog": {
     "lifetime": 20000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:glow_squid": {
     "lifetime": 15000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:goat": {
     "lifetime": 80000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:horse": {
     "lifetime": 86000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:iron_golem": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:snow_golem": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:llama": {
     "lifetime": 88000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:trader_llama": {
     "lifetime": 88000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:mooshroom": {
     "lifetime": 85000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:mule": {
     "lifetime": 88000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:ocelot": {
     "lifetime": 45000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:panda": {
     "lifetime": 90000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:parrot": {
     "lifetime": 31000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:pig": {
     "lifetime": 60000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:polar_bear": {
     "lifetime": 70000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:pufferfish": {
     "lifetime": 12000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:rabbit": {
     "lifetime": 42000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:salmon": {
     "lifetime": 10000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:sheep": {
     "lifetime": 50000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:skeleton_horse": {
     "lifetime": 88000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:sniffer": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:snowman": {
     "lifetime": 80000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:squid": {
     "lifetime": 10000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:strider": {
     "lifetime": 80000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:tadpole": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:tropical_fish": {
     "lifetime": 11000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:turtle": {
     "lifetime": 60000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:villager": {
     "lifetime": 130000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:wandering_trader": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:wolf": {
     "lifetime": 90000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:zombie_horse": {
     "lifetime": 96000,
-    "despawn_type": "kill"
+    "despawn_type": "kill",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   //Projectiles & Thrown Entities
   "minecraft:arrow": {
     "lifetime": 1000,
-    "despawn_type": "discard"
+    "despawn_type": "discard",
+    "logs": ["spawn", "despawn"],
+    "can_tagged_entities_despawn": true
   },
   "minecraft:dragon_fireball": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:egg": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:ender_pearl": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:evoker_fangs": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:eye_of_ender": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:fireball": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:firework_rocket": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:fishing_bobber": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:llama_spit": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:potion": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:shulker_bullet": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:small_fireball": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:snowball": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:spectral_arrow": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:tnt": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:trident": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:wither_skull": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:experience_bottle": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:item_frame": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:glow_item_frame": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:end_crystal": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
 
   //VehiclesRideable or transport-based entities
   "minecraft:boat": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:chest_boat": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:bamboo_raft": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:bamboo_raft_chest": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:minecart": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:chest_minecart": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:command_block_minecart": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:furnace_minecart": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:hopper_minecart": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:spawner_minecart": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:tnt_minecart": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   //Technical & Utility Entities (Non-living physical items and background game mechanics)
   "minecraft:area_effect_cloud": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:armor_stand": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:block_display": {
-    "lifetime": -1
-  },
-  "minecraft:ender_crystal": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:experience_orb": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:falling_block": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:interaction": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:item": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:item_display": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:leash_knot": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:lightning_bolt": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:marker": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   },
   "minecraft:painting": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": ["spawn"]
   },
   "minecraft:text_display": {
-    "lifetime": -1
+    "lifetime": -1,
+    "logs": []
   }
 }

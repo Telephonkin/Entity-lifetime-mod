@@ -1,12 +1,10 @@
 package net.telephonkin.data;
 
-import com.google.gson.internal.LinkedTreeMap;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class CastLinkedTreeMapToHashMap {
-    public static CastLinkedTreeMapToHashMap cast = new CastLinkedTreeMapToHashMap();
+public class ConfigConverter {
+    public static ConfigConverter cast = new ConfigConverter();
 
     private HashMap<String, HashMap<String, Object>> output;
 

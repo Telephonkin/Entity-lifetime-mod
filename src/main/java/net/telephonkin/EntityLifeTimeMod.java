@@ -282,8 +282,13 @@ public class EntityLifeTimeMod implements ModInitializer {
 		// Delete entity when chunk, where it placed, loads
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
 			if (ToDespawnEntityCacheHashSet.get(world).getSet().contains(entity.getUuid())) {
-				// Delete entity from the world
-				entity.discard();
+				// Despawn entity from the world with action provided in config
+				if (loadedEntityConfig.get(entity.toString()).get("despawn_type") == "discard") {
+					entity.discard();
+				} else { // Why just else but not elif? Because in the beginning there is a config validator
+					entity.kill();
+				}
+
 				// Remove entity from cache
 				ToDespawnEntityCacheHashSet.get(world).removeUUID(entity.getUuid());
 				ToDespawnEntityCacheHashSet.get(world).markDirty();
