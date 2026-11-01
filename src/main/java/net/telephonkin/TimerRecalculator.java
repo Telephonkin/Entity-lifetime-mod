@@ -21,7 +21,7 @@ public class TimerRecalculator {
             if (server.getOverworld().getTime() <= EntityLifeTimeMod.INSTANCE.getSecondEntity().get().getValue().entrySet().iterator().next().getValue()) {
                 // The first case
                 String entity_type_2 = EntityLifeTimeMod.INSTANCE.getSecondEntity().get().getValue().keySet().iterator().next();
-                Number entity_lifetime_raw_2 = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type_2);
+                Number entity_lifetime_raw_2 = (Number) EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type_2).get("lifetime");
                 EntityLifeTimeMod.INSTANCE.setTimer(entity_lifetime_raw_2.longValue());
                 //timer.set(entity_lifetime_raw_2.longValue());
 
@@ -29,8 +29,8 @@ public class TimerRecalculator {
                 // The second case
                 String entity_type_1 = EntityLifeTimeMod.INSTANCE.getFirstEntity().get().getValue().keySet().iterator().next();
                 String entity_type_2 = EntityLifeTimeMod.INSTANCE.getSecondEntity().get().getValue().keySet().iterator().next();
-                Number entity_lifetime_raw_1 = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type_1);
-                Number entity_lifetime_raw_2 = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type_2);
+                Number entity_lifetime_raw_1 = (Number) EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type_1).get("lifetime");
+                Number entity_lifetime_raw_2 = (Number) EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type_2).get("lifetime");
 
                 EntityLifeTimeMod.INSTANCE.setTimer(
                         (EntityLifeTimeMod.INSTANCE.getSecondEntity()
@@ -54,7 +54,7 @@ public class TimerRecalculator {
             // This is the case when there is only one entity and timer is 0
             if (EntityLifeTimeMod.INSTANCE.getTimer().get() == 0L) {
                 String entity_type = EntityLifeTimeMod.INSTANCE.getFirstEntity().get().getValue().keySet().iterator().next();
-                Number entity_lifetime_raw = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type);
+                Number entity_lifetime_raw = (Number) EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig().get(entity_type).get("lifetime");
 
                 EntityLifeTimeMod.INSTANCE.setTimer(entity_lifetime_raw.longValue());
                 EntityLifeTimeMod.INSTANCE.setCurrentEntityUUID(EntityLifeTimeMod.INSTANCE.getFirstEntity().get().getKey());

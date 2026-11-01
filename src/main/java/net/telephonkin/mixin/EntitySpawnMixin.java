@@ -27,7 +27,7 @@ public abstract class EntitySpawnMixin {
 	@Shadow @Final private MinecraftServer server;
 
 	@Unique
-	private static HashMap<String, Integer> LOADED_MOD_ENTITY_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig();
+	private static HashMap<String, HashMap<String,Object>> LOADED_MOD_ENTITY_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig();
 
 	@Unique
 	private static HashMap<String, Object> LOADED_MOD_COMMON_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedCommonConfig();
@@ -56,7 +56,7 @@ public abstract class EntitySpawnMixin {
 
 					String entityTypeString = entity.getType().toString().substring(7).replace(".",":");
 					try {
-						if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString)).intValue() != -1) {
+						if (((Number) LOADED_MOD_ENTITY_CONFIG.get(entityTypeString).get("lifetime")).intValue() != -1) {
 							// Write data about entity UUID and birth time to the table
 							birthdate = overworld.getTime();
 
@@ -68,7 +68,7 @@ public abstract class EntitySpawnMixin {
 									birthdate));
 							entity_birth_table.markDirty();
 						}
-					} catch (Exception e) {}
+					} catch (Exception ignored) {}
 				}
 			}
 		}

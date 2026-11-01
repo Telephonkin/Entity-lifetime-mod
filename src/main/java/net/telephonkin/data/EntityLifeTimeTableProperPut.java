@@ -10,7 +10,7 @@ public class EntityLifeTimeTableProperPut {
     private static final Logger LOGGER = LoggerFactory.getLogger("entity-lifetime-mod");
 
     public static LinkedHashMap<UUID, HashMap<String, Long>> putProperly(
-            HashMap<String, Integer> LOADED_MOD_CONFIG,
+            HashMap<String, HashMap<String,Object>> LOADED_MOD_CONFIG,
             LinkedHashMap<UUID, HashMap<String, Long>> input_map,
             Entity entity,
             UUID to_put_uuid,
@@ -34,9 +34,9 @@ public class EntityLifeTimeTableProperPut {
                 long how_much_does_entity_from_map_live = 0L;
                 long how_much_does_new_entity_live = 0L;
 
-                how_much_does_new_entity_live = (long) ((Number) LOADED_MOD_CONFIG.get(new_entity_type)).intValue();
+                how_much_does_new_entity_live = (long) ((Number) LOADED_MOD_CONFIG.get(new_entity_type).get("lifetime")).intValue();
 
-                how_much_does_entity_from_map_live = (long) ((Number) LOADED_MOD_CONFIG.get(entity_type_from_map)).intValue();
+                how_much_does_entity_from_map_live = (long) ((Number) LOADED_MOD_CONFIG.get(entity_type_from_map).get("lifetime")).intValue();
 
                 if (is_new_entity_added[0]) {
                     output_reversed.put(key, value);

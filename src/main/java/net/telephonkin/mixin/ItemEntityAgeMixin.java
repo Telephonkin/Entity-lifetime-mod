@@ -1,5 +1,6 @@
 package net.telephonkin.mixin;
 
+import it.unimi.dsi.fastutil.Hash;
 import net.minecraft.entity.ItemEntity;
 import net.telephonkin.EntityLifeTimeMod;
 import org.spongepowered.asm.mixin.*;
@@ -8,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Mixin(ItemEntity.class)
 public class ItemEntityAgeMixin {
@@ -15,7 +17,7 @@ public class ItemEntityAgeMixin {
     @Shadow private int itemAge;
 
     @Unique
-    private static HashMap<String, Integer> LOADED_MOD_ENTITY_CONFIG = EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig();
+    private static HashMap<String, HashMap<String,Object>> LOADED_MOD_ENTITY_CONFIG = new HashMap<String, HashMap<String, Object>>(EntityLifeTimeMod.INSTANCE.getLoadedEntityConfig());
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void changeDespawnTimer(CallbackInfo ci) {
@@ -24,8 +26,8 @@ public class ItemEntityAgeMixin {
         // Ensure we are operating on the server logic side
         if (!itemEntity.getWorld().isClient()) {
             // So when an item achieves age as it set in entity config - discard it
-            if (((Number) LOADED_MOD_ENTITY_CONFIG.get("minecraft:item")).intValue() != -1) {
-                if (itemEntity.getItemAge() >= (((Number) LOADED_MOD_ENTITY_CONFIG.get("minecraft:item")).intValue())) {
+            if (((Number) LOADED_MOD_ENTITY_CONFIG.get("minecraft:item").get("lifetime")).intValue() != -1) {
+                if (itemEntity.getItemAge() >= (((Number) LOADED_MOD_ENTITY_CONFIG.get("minecraft:item").get("lifetime")).intValue())) {
                     itemEntity.discard();
                 } else {
                     // Otherwise, if age is set to -1 - it should live forever
@@ -33,6 +35,5 @@ public class ItemEntityAgeMixin {
                 }
             }
         }
-
     }
 }

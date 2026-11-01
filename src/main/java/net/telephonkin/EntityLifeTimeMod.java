@@ -28,15 +28,15 @@ public class EntityLifeTimeMod implements ModInitializer {
 
 	private ServerWorld world;
 	private EntityLifeTimeTable entity_birth_table;
-	private HashMap<String, Integer> loadedEntityConfig;
+	private HashMap<String, HashMap<String,Object>> loadedEntityConfig;
 	private HashMap<String, Object> loadedCommonConfig;
     private SavedEntityLifeTimeCounter savedEntityLifeTimeCounter;
 
-	public HashMap<String, Integer> getLoadedEntityConfig() {
+	public HashMap<String, HashMap<String,Object>> getLoadedEntityConfig() {
 		return loadedEntityConfig;
 	}
 
-	public void setLoadedEntityConfig(HashMap<String, Integer> loadedEntityConfig) {
+	public void setLoadedEntityConfig(HashMap<String, HashMap<String,Object>> loadedEntityConfig) {
 		this.loadedEntityConfig = loadedEntityConfig;
 	}
 
@@ -210,15 +210,15 @@ public class EntityLifeTimeMod implements ModInitializer {
 						if (server.getOverworld().getTime() <= secondEntity.get().getValue().entrySet().iterator().next().getValue()) {
 							// The first case
 							String entity_type_2 = secondEntity.get().getValue().keySet().iterator().next();
-							Number entity_lifetime_raw_2 = loadedEntityConfig.get(entity_type_2);
+							Number entity_lifetime_raw_2 = (Number) loadedEntityConfig.get(entity_type_2).get("lifetime");
 							timer.set(entity_lifetime_raw_2.longValue());
 
 						} else {
 							// The second case
 							String entity_type_1 = first_entity.get().getValue().keySet().iterator().next();
 							String entity_type_2 = secondEntity.get().getValue().keySet().iterator().next();
-							Number entity_lifetime_raw_1 = loadedEntityConfig.get(entity_type_1);
-							Number entity_lifetime_raw_2 = loadedEntityConfig.get(entity_type_2);
+							Number entity_lifetime_raw_1 = (Number) loadedEntityConfig.get(entity_type_1).get("lifetime");
+							Number entity_lifetime_raw_2 = (Number) loadedEntityConfig.get(entity_type_2).get("lifetime");
 
 							timer.set(
 									(secondEntity
@@ -250,7 +250,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 						// This is the case when there is only one entity and timer is 0
 						if (timer.get() == 0L) {
 							String entity_type = first_entity.get().getValue().keySet().iterator().next();
-							Number entity_lifetime_raw = loadedEntityConfig.get(entity_type);
+							Number entity_lifetime_raw = (Number) loadedEntityConfig.get(entity_type).get("lifetime");
 
 							timer.set(entity_lifetime_raw.longValue());
 							currentEntityUUID.set(first_entity.get().getKey());
@@ -314,7 +314,7 @@ public class EntityLifeTimeMod implements ModInitializer {
 				// This is the case when there is only one entity and timer is 0
 				if (timer.get() == 0L) {
 					String entity_type = first_entity.get().getValue().keySet().iterator().next();
-					Number entity_lifetime_raw = loadedEntityConfig.get(entity_type);
+					Number entity_lifetime_raw = (Number) loadedEntityConfig.get(entity_type).get("lifetime");
 
 					timer.set(entity_lifetime_raw.longValue());
 					currentEntityUUID.set(first_entity.get().getKey());
